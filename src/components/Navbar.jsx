@@ -43,9 +43,7 @@ export default function Navbar() {
             >
               {({ isActive }) => (
                 <>
-                  <span style={{ color: "#2DD4BF", fontSize: "10px" }}>
-                    {link.num}/
-                  </span>
+                  <span style={{ color: "#2DD4BF", fontSize: "10px" }}>/</span>
                   <span>{link.label}</span>
                   {isActive && (
                     <span
@@ -111,9 +109,7 @@ export default function Navbar() {
               }
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
-              <span style={{ color: "#2DD4BF", fontSize: "10px" }}>
-                {link.num}/
-              </span>
+              <span style={{ color: "#2DD4BF", fontSize: "10px" }}>/</span>
               {link.label}
             </NavLink>
           ))}
