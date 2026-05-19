@@ -2,13 +2,22 @@ import { useEffect, useRef } from "react";
 
 const projects = [
   {
+    num: "00",
+    title: "DevLogs — Developer Social Platform",
+    description:
+      "A full stack developer-focused social platform built with Laravel. Users can create posts, track learning progress, set goals, explore resources, and interact with other developers. Includes authentication, profiles, dashboard, and a modern UI built with Blade and Tailwind.",
+    tags: ["Laravel", "PHP", "MySQL", "Blade", "Tailwind CSS"],
+    live: "https://devlogs.42web.io",
+    github: "https://github.com/zobdhillon/devlogs",
+    featured: true,
+  },
+  {
     num: "01",
     title: "Task Tracker",
     description:
       "A full stack task management app built with Laravel. Features user authentication, CRUD operations, dark mode, and a clean Tailwind UI. Built with Laravel Breeze, Blade templates, and Vite.",
     tags: ["Laravel", "PHP", "Tailwind CSS", "MySQL", "Blade"],
-    live: "https://github.com/zobdhillon",
-    github: "https://github.com/zobdhillon",
+    github: "https://github.com/zobdhillon/TaskTracker",
     featured: true,
   },
   {
@@ -39,27 +48,31 @@ export default function Projects() {
   useEffect(() => {
     const els = ref.current?.querySelectorAll(".reveal");
     els?.forEach((el, i) => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(24px)";
-      setTimeout(() => {
-        el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-        el.style.opacity = "1";
-        el.style.transform = "translateY(0)";
-      }, i * 120);
+      el.classList.remove("show");
+      setTimeout(() => el.classList.add("show"), i * 120);
     });
   }, []);
 
   return (
-    <div ref={ref} className="min-h-screen pt-32 pb-20 px-8 max-w-7xl mx-auto w-full">
+    <div
+      ref={ref}
+      className="min-h-screen pt-32 pb-20 px-8 max-w-7xl mx-auto w-full"
+    >
       {/* Section label */}
       <div className="reveal flex items-center gap-3 mb-16">
         <span
           className="text-xs tracking-[0.3em] uppercase"
-          style={{ color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}
+          style={{
+            color: "#2DD4BF",
+            fontFamily: "'JetBrains Mono', monospace",
+          }}
         >
           03/ Projects
         </span>
-        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+        <div
+          className="flex-1 h-px"
+          style={{ background: "rgba(255,255,255,0.06)" }}
+        />
       </div>
 
       <h2
@@ -84,13 +97,16 @@ export default function Projects() {
         {projects.map((project) => (
           <div
             key={project.num}
-            className="reveal group border-t py-8 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-12 cursor-default transition-all duration-300 hover:pl-4"
+            className="reveal group border-t py-8 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-12 cursor-default transform transition-transform duration-300 ease-out hover:translate-x-3"
             style={{ borderColor: "rgba(255,255,255,0.07)" }}
           >
             {/* Number */}
             <span
               className="text-xs flex-shrink-0"
-              style={{ color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}
+              style={{
+                color: "#2DD4BF",
+                fontFamily: "'JetBrains Mono', monospace",
+              }}
             >
               {project.num}
             </span>
@@ -124,7 +140,10 @@ export default function Projects() {
             {/* Description */}
             <p
               className="flex-1 text-sm leading-relaxed"
-              style={{ color: "rgba(255,255,255,0.35)", fontFamily: "'DM Sans', sans-serif" }}
+              style={{
+                color: "rgba(255,255,255,0.35)",
+                fontFamily: "'DM Sans', sans-serif",
+              }}
             >
               {project.description}
             </p>
@@ -154,7 +173,10 @@ export default function Projects() {
                   target="_blank"
                   rel="noreferrer"
                   className="text-xs tracking-widest uppercase transition-colors hover:text-white"
-                  style={{ color: "#2DD4BF", fontFamily: "'JetBrains Mono', monospace" }}
+                  style={{
+                    color: "#2DD4BF",
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}
                 >
                   Live ↗
                 </a>
@@ -165,7 +187,10 @@ export default function Projects() {
                   target="_blank"
                   rel="noreferrer"
                   className="text-xs tracking-widest uppercase transition-colors hover:text-white"
-                  style={{ color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono', monospace" }}
+                  style={{
+                    color: "rgba(255,255,255,0.3)",
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}
                 >
                   GitHub ↗
                 </a>
@@ -175,13 +200,19 @@ export default function Projects() {
         ))}
 
         {/* Bottom border */}
-        <div className="border-t" style={{ borderColor: "rgba(255,255,255,0.07)" }} />
+        <div
+          className="border-t"
+          style={{ borderColor: "rgba(255,255,255,0.07)" }}
+        />
       </div>
 
       {/* More coming */}
       <p
         className="reveal mt-12 text-xs tracking-[0.3em] uppercase"
-        style={{ color: "rgba(255,255,255,0.2)", fontFamily: "'JetBrains Mono', monospace" }}
+        style={{
+          color: "rgba(255,255,255,0.2)",
+          fontFamily: "'JetBrains Mono', monospace",
+        }}
       >
         // More projects coming soon — React & Vue apps in progress
       </p>
