@@ -1,16 +1,37 @@
-# React + Vite
+# 👋 Hi, I'm Zobia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is my personal portfolio website.
 
-Currently, two official plugins are available:
+I’m a full-stack developer who enjoys building clean, useful, and meaningful web applications. I like turning ideas into real projects and continuously improving my skills through hands-on development.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🌱 About This Project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This portfolio represents my journey as a developer. It’s a place where I showcase my work, experiment with ideas, and express what I’m learning and building.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 What I Focus On
+
+- Building real-world web applications  
+- Learning and improving every day  
+- Creating clean and user-friendly interfaces  
+- Turning ideas into working products  
+
+---
+
+## 🌐 Live Website
+
+https://zobdhillon.netlify.app
+
+---
+
+## 📫 Connect With Me
+
+- GitHub: https://github.com/zobdhillon  
+- Portfolio: https://devlogs.42web.io  
+
+---
+
+⭐ Always learning, always building.
