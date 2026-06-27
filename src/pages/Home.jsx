@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import Marquee from "../components/Marquee";
 import { useEffect, useRef } from "react";
 
@@ -7,25 +6,21 @@ export default function Home() {
 
   useEffect(() => {
     const els = heroRef.current?.querySelectorAll(".reveal");
-    els?.forEach((el, i) => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(30px)";
+    if (!els) return;
+    els.forEach((el, i) => {
       setTimeout(() => {
-        el.style.transition = "opacity 0.7s ease, transform 0.7s ease";
-        el.style.opacity = "1";
-        el.style.transform = "translateY(0)";
+        el.classList.add("show");
       }, i * 120);
     });
   }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Hero */}
       <section
         ref={heroRef}
-        className="flex-1 flex flex-col justify-center  px-8 pt-32 pb-16 max-w-7xl mx-auto w-full relative overflow-hidden"
+        className="flex-1 flex flex-col justify-center px-8 pt-32 pb-16 max-w-7xl mx-auto w-full relative overflow-hidden"
       >
-        {/* Hero SVG Symbol */}
+        {/* Hero SVG — unchanged */}
         <div
           style={{
             position: "absolute",
@@ -43,18 +38,16 @@ export default function Home() {
             xmlns="http://www.w3.org/2000/svg"
           >
             <style>{`
-      @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(-8deg); }
-        50% { transform: translateY(-18px) rotate(-8deg); }
-      }
-      .symbol-group {
-        animation: float 6s ease-in-out infinite;
-        transform-origin: 240px 240px;
-      }
-    `}</style>
-
+              @keyframes float {
+                0%, 100% { transform: translateY(0px) rotate(-8deg); }
+                50% { transform: translateY(-18px) rotate(-8deg); }
+              }
+              .symbol-group {
+                animation: float 6s ease-in-out infinite;
+                transform-origin: 240px 240px;
+              }
+            `}</style>
             <g className="symbol-group">
-              {/* Outer hexagon */}
               <polygon
                 points="240,80 360,148 360,284 240,352 120,284 120,148"
                 fill="none"
@@ -62,8 +55,6 @@ export default function Home() {
                 strokeWidth="1"
                 opacity="0.25"
               />
-
-              {/* Inner hexagon */}
               <polygon
                 points="240,112 332,163 332,265 240,316 148,265 148,163"
                 fill="none"
@@ -71,8 +62,6 @@ export default function Home() {
                 strokeWidth="0.6"
                 opacity="0.12"
               />
-
-              {/* Left bracket < */}
               <path
                 d="M195 185 L162 216 L195 247"
                 fill="none"
@@ -82,8 +71,6 @@ export default function Home() {
                 strokeLinejoin="round"
                 opacity="0.9"
               />
-
-              {/* Right bracket > */}
               <path
                 d="M285 185 L318 216 L285 247"
                 fill="none"
@@ -93,8 +80,6 @@ export default function Home() {
                 strokeLinejoin="round"
                 opacity="0.9"
               />
-
-              {/* Slash */}
               <line
                 x1="255"
                 y1="183"
@@ -105,16 +90,12 @@ export default function Home() {
                 strokeLinecap="round"
                 opacity="0.7"
               />
-
-              {/* Corner dots */}
               <circle cx="120" cy="148" r="3" fill="#2DD4BF" opacity="0.5" />
               <circle cx="360" cy="148" r="3" fill="#2DD4BF" opacity="0.5" />
               <circle cx="360" cy="284" r="3" fill="#2DD4BF" opacity="0.5" />
               <circle cx="120" cy="284" r="3" fill="#2DD4BF" opacity="0.5" />
               <circle cx="240" cy="80" r="3" fill="#2DD4BF" opacity="0.3" />
               <circle cx="240" cy="352" r="3" fill="#2DD4BF" opacity="0.3" />
-
-              {/* Floating particles */}
               <circle cx="90" cy="200" r="2" fill="#2DD4BF" opacity="0.4" />
               <circle cx="390" cy="170" r="1.5" fill="#2DD4BF" opacity="0.3" />
               <circle cx="380" cy="300" r="2" fill="#2DD4BF" opacity="0.25" />
@@ -122,7 +103,7 @@ export default function Home() {
             </g>
           </svg>
         </div>
-        {/* Top meta row */}
+
         <div className="reveal flex items-center gap-3 mb-12">
           <span
             className="text-xs tracking-[0.3em] uppercase"
@@ -139,18 +120,18 @@ export default function Home() {
           />
         </div>
 
-        {/* Giant heading */}
         <div className="reveal overflow-hidden">
           <h1
-            className="text-[clamp(5rem,15vw,14rem)] leading-none font-display tracking-tight text-white"
+            className="text-[clamp(5rem,15vw,14rem)] leading-none tracking-tight text-white"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
           >
             FULL STACK
           </h1>
         </div>
+
         <div className="reveal overflow-hidden flex items-end gap-6">
           <h1
-            className="text-[clamp(5rem,15vw,14rem)] leading-none font-display tracking-tight"
+            className="text-[clamp(5rem,15vw,14rem)] leading-none tracking-tight"
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
               color: "transparent",
@@ -167,7 +148,6 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Bottom row */}
         <div className="reveal mt-12 flex items-end justify-between flex-wrap gap-8">
           <div className="max-w-md">
             <p
@@ -178,8 +158,12 @@ export default function Home() {
               Laravel, PHP, React and Vue.
             </p>
             <div className="flex gap-4 mt-8">
-              <Link
-                to="/projects"
+              <button
+                onClick={() =>
+                  document
+                    .getElementById("projects")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 className="px-6 py-3 text-sm tracking-widest uppercase font-medium transition-all duration-200 hover:opacity-80"
                 style={{
                   backgroundColor: "#2DD4BF",
@@ -188,9 +172,13 @@ export default function Home() {
                 }}
               >
                 View Projects
-              </Link>
-              <Link
-                to="/contact"
+              </button>
+              <button
+                onClick={() =>
+                  document
+                    .getElementById("contact")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 className="px-6 py-3 text-sm tracking-widest uppercase font-medium border transition-all duration-200 hover:border-white/40"
                 style={{
                   border: "1px solid rgba(255,255,255,0.15)",
@@ -199,11 +187,10 @@ export default function Home() {
                 }}
               >
                 Contact
-              </Link>
+              </button>
             </div>
           </div>
 
-          {/* Name + socials */}
           <div className="text-right">
             <p
               className="text-white/20 text-xs tracking-[0.3em] uppercase mb-2"
@@ -224,10 +211,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Marquee */}
       <Marquee />
 
-      {/* Bottom strip */}
       <div className="px-8 py-5 flex items-center justify-between">
         <span
           className="text-white/15 text-xs tracking-widest"

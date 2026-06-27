@@ -46,11 +46,23 @@ export default function Projects() {
   const ref = useRef(null);
 
   useEffect(() => {
-    const els = ref.current?.querySelectorAll(".reveal");
-    els?.forEach((el, i) => {
-      el.classList.remove("show");
-      setTimeout(() => el.classList.add("show"), i * 120);
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    // scope to THIS section only
+    const reveals = ref.current?.querySelectorAll(".reveal");
+    reveals?.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -58,7 +70,6 @@ export default function Projects() {
       ref={ref}
       className="min-h-screen pt-32 pb-20 px-8 max-w-7xl mx-auto w-full"
     >
-      {/* Section label */}
       <div className="reveal flex items-center gap-3 mb-16">
         <span
           className="text-xs tracking-[0.3em] uppercase"
@@ -92,7 +103,6 @@ export default function Projects() {
         <span style={{ color: "#2DD4BF" }}>.</span>
       </h2>
 
-      {/* Projects list */}
       <div className="space-y-1">
         {projects.map((project) => (
           <div
@@ -100,7 +110,6 @@ export default function Projects() {
             className="reveal group border-t py-8 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-12 cursor-default transform transition-transform duration-300 ease-out hover:translate-x-3"
             style={{ borderColor: "rgba(255,255,255,0.07)" }}
           >
-            {/* Number */}
             <span
               className="text-xs flex-shrink-0"
               style={{
@@ -111,7 +120,6 @@ export default function Projects() {
               {project.num}
             </span>
 
-            {/* Title */}
             <h3
               className="text-2xl lg:text-3xl font-display flex-shrink-0 w-full lg:w-64 group-hover:text-white transition-colors"
               style={{
@@ -137,7 +145,6 @@ export default function Projects() {
               )}
             </h3>
 
-            {/* Description */}
             <p
               className="flex-1 text-sm leading-relaxed"
               style={{
@@ -148,7 +155,6 @@ export default function Projects() {
               {project.description}
             </p>
 
-            {/* Tags */}
             <div className="flex flex-wrap gap-2 lg:w-64 flex-shrink-0">
               {project.tags.map((tag) => (
                 <span
@@ -165,7 +171,6 @@ export default function Projects() {
               ))}
             </div>
 
-            {/* Links */}
             <div className="flex gap-4 flex-shrink-0">
               {project.live && (
                 <a
@@ -199,14 +204,12 @@ export default function Projects() {
           </div>
         ))}
 
-        {/* Bottom border */}
         <div
           className="border-t"
           style={{ borderColor: "rgba(255,255,255,0.07)" }}
         />
       </div>
 
-      {/* More coming */}
       <p
         className="reveal mt-12 text-xs tracking-[0.3em] uppercase"
         style={{
