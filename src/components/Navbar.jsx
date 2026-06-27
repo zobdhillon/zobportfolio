@@ -39,16 +39,22 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo — left */}
-        <span
-          className="text-white text-2xl cursor-pointer flex-shrink-0"
+
+        <div
+          className="cursor-pointer flex-shrink-0 leading-none"
           style={{
             fontFamily: "'Bebas Neue', sans-serif",
             letterSpacing: "0.1em",
           }}
           onClick={() => scrollTo("home")}
         >
-          ZOB<span style={{ color: "#2DD4BF" }}>.</span>
-        </span>
+          <div className="text-white" style={{ fontSize: "18px" }}>
+            ZOBIA
+          </div>
+          <div className="text-white" style={{ fontSize: "18px" }}>
+            DHILLON
+          </div>
+        </div>
 
         {/* Desktop links — absolutely centered */}
         <ul className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
