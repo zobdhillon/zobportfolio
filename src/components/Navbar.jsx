@@ -20,92 +20,111 @@ export default function Navbar() {
       },
       { rootMargin: "-40% 0px -55% 0px" },
     );
-
     links.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
-
     return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setOpen(false); // closes mobile menu too
+    setOpen(false);
   };
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 px-6 py-5 flex items-center justify-between"
+      className="fixed top-0 left-0 right-0 z-50 px-8 py-5"
       style={{ background: "rgba(9,9,9,0.85)", backdropFilter: "blur(12px)" }}
     >
-      {/* Logo */}
-      <span
-        className="text-white text-2xl cursor-pointer"
-        style={{
-          fontFamily: "'Bebas Neue', sans-serif",
-          letterSpacing: "0.1em",
-        }}
-        onClick={() => scrollTo("home")}
-      >
-        ZOB<span style={{ color: "#2DD4BF" }}>.</span>
-      </span>
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Logo — left */}
+        <span
+          className="text-white text-2xl cursor-pointer flex-shrink-0"
+          style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            letterSpacing: "0.1em",
+          }}
+          onClick={() => scrollTo("home")}
+        >
+          ZOB<span style={{ color: "#2DD4BF" }}>.</span>
+        </span>
 
-      {/* Desktop links */}
-      <ul className="hidden md:flex items-center gap-10">
-        {links.map((link) => {
-          const isActive = activeSection === link.id;
-          return (
-            <li key={link.id}>
-              <button
-                onClick={() => scrollTo(link.id)}
-                className={`flex items-center gap-1.5 text-sm tracking-widest uppercase transition-colors duration-200 bg-transparent border-none cursor-pointer ${
-                  isActive ? "text-white" : "text-white/40 hover:text-white/80"
-                }`}
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              >
-                <span style={{ color: "#2DD4BF", fontSize: "10px" }}>/</span>
-                <span>{link.label}</span>
-                {isActive && (
-                  <span
-                    className="ml-1 w-1 h-1 rounded-full inline-block"
-                    style={{ backgroundColor: "#2DD4BF" }}
-                  />
-                )}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+        {/* Desktop links — absolutely centered */}
+        <ul className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+          {links.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <li key={link.id}>
+                <button
+                  onClick={() => scrollTo(link.id)}
+                  className={`flex items-center gap-1.5 text-sm tracking-widest uppercase transition-colors duration-200 bg-transparent border-none cursor-pointer ${
+                    isActive
+                      ? "text-white"
+                      : "text-white/40 hover:text-white/80"
+                  }`}
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                >
+                  <span style={{ color: "#2DD4BF", fontSize: "10px" }}>/</span>
+                  <span>{link.label}</span>
+                  {isActive && (
+                    <span
+                      className="ml-1 w-1 h-1 rounded-full inline-block"
+                      style={{ backgroundColor: "#2DD4BF" }}
+                    />
+                  )}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
 
-      {/* Hamburger button */}
-      <button
-        className="md:hidden flex flex-col gap-1.5 p-2"
-        onClick={() => setOpen(!open)}
-        aria-label="Toggle menu"
-      >
-        <span
-          className="block w-6 h-px transition-all duration-300"
+        {/* Right side — availability status */}
+        <div
+          className="hidden md:flex items-center gap-2 flex-shrink-0"
           style={{
-            backgroundColor: "#2DD4BF",
-            transform: open ? "rotate(45deg) translateY(8px)" : "none",
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "11px",
+            color: "rgba(255,255,255,0.25)",
+            letterSpacing: "0.05em",
           }}
-        />
-        <span
-          className="block w-6 h-px transition-all duration-300"
-          style={{
-            backgroundColor: "#2DD4BF",
-            opacity: open ? 0 : 1,
-          }}
-        />
-        <span
-          className="block w-6 h-px transition-all duration-300"
-          style={{
-            backgroundColor: "#2DD4BF",
-            transform: open ? "rotate(-45deg) translateY(-8px)" : "none",
-          }}
-        />
-      </button>
+        >
+          <span
+            className="w-1.5 h-1.5 rounded-full animate-pulse"
+            style={{ background: "#2DD4BF" }}
+          />
+          <span>Available</span>
+        </div>
+
+        {/* Hamburger — mobile only */}
+        <button
+          className="md:hidden flex flex-col gap-1.5 p-2"
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+        >
+          <span
+            className="block w-6 h-px transition-all duration-300"
+            style={{
+              backgroundColor: "#2DD4BF",
+              transform: open ? "rotate(45deg) translateY(8px)" : "none",
+            }}
+          />
+          <span
+            className="block w-6 h-px transition-all duration-300"
+            style={{
+              backgroundColor: "#2DD4BF",
+              opacity: open ? 0 : 1,
+            }}
+          />
+          <span
+            className="block w-6 h-px transition-all duration-300"
+            style={{
+              backgroundColor: "#2DD4BF",
+              transform: open ? "rotate(-45deg) translateY(-8px)" : "none",
+            }}
+          />
+        </button>
+      </div>
 
       {/* Mobile menu */}
       {open && (
