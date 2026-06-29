@@ -8,6 +8,7 @@ export default {
       },
       fontFamily: {
         display: ["'Bebas Neue'", "sans-serif"],
+        hero: ["'Syne'", "sans-serif"], 
         body: ["'DM Sans'", "sans-serif"],
         mono: ["'JetBrains Mono'", "monospace"],
       },
@@ -15,5 +16,3 @@ export default {
   },
   plugins: [],
 };
-
-

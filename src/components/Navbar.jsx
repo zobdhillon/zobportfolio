@@ -39,7 +39,6 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo — left */}
-
         <div
           className="cursor-pointer flex-shrink-0 leading-none"
           style={{
@@ -48,12 +47,8 @@ export default function Navbar() {
           }}
           onClick={() => scrollTo("home")}
         >
-          <div className="text-white" style={{ fontSize: "18px" }}>
-            ZOBIA
-          </div>
-          <div className="text-white" style={{ fontSize: "18px" }}>
-            DHILLON
-          </div>
+          <div className="text-white" style={{ fontSize: "18px" }}>ZOBIA</div>
+          <div className="text-white" style={{ fontSize: "18px" }}>DHILLON</div>
         </div>
 
         {/* Desktop links — absolutely centered */}
@@ -65,9 +60,7 @@ export default function Navbar() {
                 <button
                   onClick={() => scrollTo(link.id)}
                   className={`flex items-center gap-1.5 text-sm tracking-widest uppercase transition-colors duration-200 bg-transparent border-none cursor-pointer ${
-                    isActive
-                      ? "text-white"
-                      : "text-white/40 hover:text-white/80"
+                    isActive ? "text-white" : "text-white/40 hover:text-white/80"
                   }`}
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
@@ -85,10 +78,11 @@ export default function Navbar() {
           })}
         </ul>
 
-        {/* Right side — availability status */}
+        {/* Right side — availability status with circle always wrapping it */}
         <div
           className="hidden md:flex items-center gap-2 flex-shrink-0"
           style={{
+            position: "relative",
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: "11px",
             color: "rgba(255,255,255,0.25)",
@@ -100,6 +94,22 @@ export default function Navbar() {
             style={{ background: "#2DD4BF" }}
           />
           <span>Available</span>
+
+          {/* Circle centered on the Available container, scales with viewport */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "clamp(90px, 10vw, 160px)",
+              height: "clamp(90px, 10vw, 160px)",
+              borderRadius: "50%",
+              border: "1px solid rgba(255, 255, 255, 0.18)",
+              pointerEvents: "none",
+              zIndex: 40,
+            }}
+          />
         </div>
 
         {/* Hamburger — mobile only */}
