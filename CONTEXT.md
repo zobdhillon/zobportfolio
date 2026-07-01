@@ -134,3 +134,8 @@ src/
 "lucide-react": "latest"
 ```
 Fonts loaded via Google Fonts or similar: `Fira Code`, `Bebas Neue`, `DM Sans`, `JetBrains Mono`, `Georgia` (system).
+
+<SideCircle side="right" align="bottom" size="50vw" showAmount={38} />
+
+// Contact — left, centered, teal
+<SideCircle side="left" align="center" size="52vw" showAmount={50} color="rgba(45,212,191,0.06)" />

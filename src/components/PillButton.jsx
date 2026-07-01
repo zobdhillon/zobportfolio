@@ -24,10 +24,11 @@ export default function PillButton({ label, onClick, href, target }) {
           width: "46px",
           height: "46px",
           borderRadius: "50%",
-          background: "#1a1a1a",
+          background: "white",
           border: "1px solid rgba(255,255,255,0.15)",
-          color: "white",
+          color: "#090909",
           fontSize: "16px",
+          fontWeight: 800
         }}
       >
         →
