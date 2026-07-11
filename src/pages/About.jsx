@@ -1,16 +1,16 @@
 import { useEffect, useRef } from "react";
 import CircleIconButton from "../components/CircleIconButton";
 import SideCircle from "../components/SideCircle";
+import profilePic from "../assets/profile-pic.png";
 
 // ── Skill card data ────────────────────────────────────────────────────────────
 const frontEnd = {
   title: "Front-end",
   techs: [
     "React",
-    "Next.js",
+    "Vue",
     "TypeScript",
     "JavaScript",
-    "Redux",
     "Tailwind CSS",
     "HTML",
     "CSS",
@@ -34,14 +34,13 @@ const backEnd = {
     "Node.js",
     "MySQL",
     "PostgreSQL",
-    "MongoDB",
     "REST APIs",
     "Groq API",
   ],
 };
 const devOps = {
   title: "Tools & More",
-  techs: ["Git", "GitHub", "Vite", "Figma", "Vercel", "Netlify"],
+  techs: ["Git", "GitHub", "Vite", "Figma", "Vercel", "Netlify", "Railway"],
 };
 
 function GithubFilled({ size = 16, color = "rgba(255,255,255,0.9)" }) {
@@ -65,12 +64,14 @@ function SkillCard({
   style = {},
   titleStyle = {},
   techStyle = {},
+  className = "",
 }) {
   return (
     <div
+      className={className}
       style={{
         background: "#0e0e0e",
-        border: "1px solid rgba(0,210,163,0.2)",
+        border: "1px solid rgba(255,255,255,0.15)",
         borderRadius: "12px",
         padding: "24px",
         ...style,
@@ -107,16 +108,25 @@ function SkillCard({
 export default function About() {
   const sectionRef = useRef(null);
 
-  // Reveal animation — same pattern as Home.jsx
+  // Reveal animation — triggers when each element scrolls further into view
   useEffect(() => {
     const elements = sectionRef.current?.querySelectorAll(".reveal");
     if (!elements) return;
-    const timeouts = [];
-    elements.forEach((el, i) => {
-      const t = setTimeout(() => el.classList.add("show"), 120 * i);
-      timeouts.push(t);
-    });
-    return () => timeouts.forEach(clearTimeout);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.25, rootMargin: "0px 0px -15% 0px" },
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -148,7 +158,6 @@ export default function About() {
           padding: "40px 32px 0",
         }}
       >
-        {/* ── Top row: breadcrumb + intro ──────────────────────────────────── */}
         <div
           className="reveal"
           style={{
@@ -214,6 +223,7 @@ export default function About() {
             {/* Front-end */}
             <SkillCard
               {...frontEnd}
+              className="skill-card-wide"
               style={{
                 maxWidth: "520px",
                 background: "rgba(255,255,255,0.97)",
@@ -225,7 +235,11 @@ export default function About() {
 
             {/* Styles row + arrow button */}
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-              <SkillCard {...styles} style={{ width: "300px" }} />
+              <SkillCard
+                {...styles}
+                className="skill-card-styles"
+                style={{ width: "300px" }}
+              />
 
               {/* Circular arrow button */}
               <CircleIconButton
@@ -236,10 +250,15 @@ export default function About() {
             </div>
 
             {/* Back-end */}
-            <SkillCard {...backEnd} style={{ maxWidth: "520px" }} />
+            <SkillCard
+              {...backEnd}
+              className="skill-card-wide"
+              style={{ maxWidth: "520px" }}
+            />
 
             {/* Caption + DevOps */}
             <div
+              className="about-caption-row"
               style={{
                 display: "flex",
                 alignItems: "flex-end",
@@ -263,7 +282,11 @@ export default function About() {
                 </em>{" "}
                 that I worked with
               </p>
-              <SkillCard {...devOps} style={{ width: "260px" }} />
+              <SkillCard
+                {...devOps}
+                className="skill-card-devops"
+                style={{ width: "260px" }}
+              />
             </div>
           </div>
 
@@ -273,9 +296,8 @@ export default function About() {
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
             <div
+              className="portrait-box"
               style={{
-                width: "340px",
-                height: "440px",
                 borderRadius: "18px",
                 border: "1px solid rgba(0,210,163,0.2)",
                 background: "#0e0e0e",
@@ -283,13 +305,13 @@ export default function About() {
               }}
             >
               <img
-                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=680&q=80"
+                src={profilePic}
                 alt="Portrait of Zobia"
                 style={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
-                  filter: "grayscale(100%) contrast(1.1)",
+                  filter: "grayscale(100%)",
                 }}
               />
             </div>
@@ -297,19 +319,50 @@ export default function About() {
         </div>
       </div>
 
-      {/* ── Mobile layout overrides ─────────────────────────────────────────── */}
+      {/* ── Responsive overrides ─────────────────────────────────────────── */}
       <style>{`
-        /* Reveal animation — same pattern as Home.jsx */
+                /* Reveal animation — same pattern as Home.jsx */
         .reveal {
           opacity: 0;
-          transform: translateY(18px);
-          transition: opacity 0.55s ease, transform 0.55s ease;
+          transform: translateY(40px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
         }
         .reveal.show {
           opacity: 1;
           transform: translateY(0);
         }
 
+        .portrait-box {
+          width: 340px;
+          height: 440px;
+        }
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+          #about > div {
+            padding: 32px 24px 0 !important;
+          }
+          #about .reveal:first-child {
+            grid-template-columns: 1fr 1.2fr !important;
+            gap: 16px !important;
+          }
+          #about .reveal:first-child > p:last-of-type {
+            display: none;
+          }
+          #about > div > div:last-child {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          .portrait-box {
+            width: 100%;
+            max-width: 340px;
+            height: auto;
+            aspect-ratio: 340 / 440;
+            margin: 0 auto;
+          }
+        }
+
+        /* Mobile */
         @media (max-width: 767px) {
           #about > div {
             padding: 24px 20px 0 !important;
@@ -327,29 +380,28 @@ export default function About() {
           }
 
           /* Cards: full width */
-          #about [style*="maxWidth: 520"] {
+          .skill-card-wide,
+          .skill-card-styles,
+          .skill-card-devops {
             max-width: 100% !important;
-          }
-          #about [style*="width: 300"] {
             width: 100% !important;
-          }
-          #about [style*="width: 260"] {
-            width: 100% !important;
-          }
-
-          /* Portrait: centered, smaller */
-          #about > div > div:last-child > div:last-child {
-            justify-content: center !important;
-          }
-          #about > div > div:last-child > div:last-child > div {
-            width: 100% !important;
-            height: 300px !important;
           }
 
           /* Caption + DevOps: stack */
-          #about [style*="alignItems: flex-end"] {
+          .about-caption-row {
             flex-direction: column !important;
             align-items: flex-start !important;
+          }
+
+          /* Portrait: centered, scales with width */
+          #about > div > div:last-child > div:last-child {
+            justify-content: center !important;
+          }
+          .portrait-box {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
           }
         }
       `}</style>

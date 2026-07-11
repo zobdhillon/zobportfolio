@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 
-export default function DualCircleButton({
+export default function CircleIconButton({
   leftIcon: LeftIcon,
   rightIcon: RightIcon = ArrowUpRight,
   href,

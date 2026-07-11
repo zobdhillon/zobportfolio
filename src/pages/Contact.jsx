@@ -1,18 +1,115 @@
 import { useEffect, useRef } from "react";
+import { Github, Linkedin, Mail, Send } from "lucide-react";
+import SideCircle from "../components/SideCircle";
 
-const contactLinks = [
-  {
-    label: "Email",
-    value: "zobbdhillon@gmail.com",
-    href: "mailto:zobbdhillon@gmail.com",
-  },
-  {
-    label: "GitHub",
-    value: "github.com/zobdhillon",
-    href: "https://github.com/zobdhillon",
-  },
+const socials = [
+  { label: "GitHub",   href: "https://github.com/zobdhillon",        icon: Github },
+  { label: "LinkedIn", href: "https://linkedin.com",                  icon: Linkedin },
+  { label: "E-mail",   href: "mailto:zobbdhillon@gmail.com",          icon: Mail },
+  { label: "Telegram", href: "https://t.me/zobdhillon",               icon: Send },
 ];
 
+const navLinks = [
+  { label: "Main",     id: "home" },
+  { label: "About",    id: "about" },
+  { label: "Projects", id: "projects" },
+  { label: "Contact",  id: "contact" },
+];
+
+const scrollTo = (id) =>
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+// ── Code block (developer.js) ─────────────────────────────────────────────
+function CodeBlock() {
+  const lines = [
+    { num: 1, content: <><span style={{ color: "#2DD4BF" }}>const</span><span style={{ color: "rgba(255,255,255,0.9)" }}> developer </span><span style={{ color: "rgba(255,255,255,0.4)" }}>=</span><span style={{ color: "rgba(255,255,255,0.9)" }}> {"{"}</span></> },
+    { num: 2, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>name</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"Zob Dhillon"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
+    { num: 3, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>role</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"Full Stack Developer"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
+    { num: 4, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>email</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"zobbdhillon@gmail.com"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
+    { num: 5, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>github</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"zobdhillon"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
+    { num: 6, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>available</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF" }}>true</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
+    { num: 7, content: <span style={{ color: "rgba(255,255,255,0.9)" }}>{"}"}</span> },
+  ];
+
+  return (
+    <div
+      style={{
+        borderRadius: "16px",
+        border: "1px solid rgba(255,255,255,0.08)",
+        background: "rgba(255,255,255,0.02)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Terminal header */}
+      <div
+        className="flex items-center gap-2 px-4 py-3"
+        style={{
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          background: "rgba(255,255,255,0.02)",
+        }}
+      >
+        <span className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: "#febc2e" }} />
+        <span className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
+        <span
+          className="ml-4 text-xs"
+          style={{ color: "rgba(255,255,255,0.2)", fontFamily: "'JetBrains Mono', monospace" }}
+        >
+          developer.js
+        </span>
+      </div>
+
+      {/* Code */}
+      <div className="p-5" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", lineHeight: "2" }}>
+        {lines.map((line) => (
+          <div key={line.num} className="flex gap-4">
+            <span style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px", userSelect: "none" }}>
+              {line.num}
+            </span>
+            <span className={line.indent ? "pl-6" : ""}>{line.content}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Social pill ───────────────────────────────────────────────────────────
+function SocialPill({ label, href, icon: Icon }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="flex items-center justify-center gap-2 transition-all duration-200"
+      style={{
+        borderRadius: "999px",
+        border: "1px solid rgba(255,255,255,0.12)",
+        background: "rgba(255,255,255,0.03)",
+        color: "rgba(255,255,255,0.6)",
+        fontFamily: "'DM Sans', sans-serif",
+        fontStyle: "italic",
+        fontSize: "13px",
+        padding: "10px 20px",
+        textDecoration: "none",
+        whiteSpace: "nowrap",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "rgba(45,212,191,0.4)";
+        e.currentTarget.style.color = "#2DD4BF";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+        e.currentTarget.style.color = "rgba(255,255,255,0.6)";
+      }}
+    >
+      <Icon size={14} strokeWidth={1.8} />
+      {label}
+    </a>
+  );
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────
 export default function Contact() {
   const ref = useRef(null);
 
@@ -26,278 +123,250 @@ export default function Contact() {
           }
         });
       },
-      { threshold: 0.15 },
+      { threshold: 0.1 }
     );
-
-    // scope to THIS section only
     const reveals = ref.current?.querySelectorAll(".reveal");
     reveals?.forEach((el) => observer.observe(el));
-
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div
+    <section
       ref={ref}
-      className="min-h-screen pt-32 pb-20 px-8 max-w-7xl mx-auto w-full"
+      id="contact"
+      style={{ background: "#090909", position: "relative", overflow: "hidden" }}
     >
-      <div className="reveal flex items-center gap-3 mb-16">
-        <span
-          className="text-xs tracking-[0.3em] uppercase"
-          style={{
-            color: "#2DD4BF",
-            fontFamily: "'JetBrains Mono', monospace",
-          }}
-        >
-          04/ Contact
-        </span>
-        <div
-          className="flex-1 h-px"
-          style={{ background: "rgba(255,255,255,0.06)" }}
-        />
-      </div>
+      <div
+        className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8"
+        style={{ paddingTop: "clamp(80px, 10vw, 140px)", paddingBottom: "clamp(60px, 8vw, 100px)" }}
+      >
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-        <div>
-          <h2
-            className="reveal text-[clamp(3rem,8vw,6rem)] leading-none mb-6"
-            style={{ fontFamily: "'Bebas Neue', sans-serif", color: "white" }}
-          >
-            LET'S
-            <br />
+        {/* ── DESKTOP layout (lg+) ──────────────────────────────────────── */}
+        <div className="hidden lg:grid lg:grid-cols-2 lg:gap-20 lg:items-start">
+
+          {/* Left — huge name + subtitle + SideCircle */}
+          <div className="reveal relative flex flex-col justify-between" style={{ minHeight: "520px" }}>
+            <SideCircle side="left" />
+
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <h2
+                style={{
+                  fontFamily: "'Fira Code', monospace",
+                  fontWeight: 700,
+                  fontSize: "clamp(4rem, 10vw, 9rem)",
+                  color: "white",
+                  lineHeight: 0.95,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "24px",
+                }}
+              >
+                Zob<br />Dhillon
+              </h2>
+
+              <p
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: 300,
+                  fontSize: "15px",
+                  color: "rgba(255,255,255,0.4)",
+                  lineHeight: 1.5,
+                  maxWidth: "160px",
+                }}
+              >
+                Full-stack<br />developer
+              </p>
+            </div>
+
+            {/* Social pills — desktop 2 column grid */}
+            <div
+              className="reveal grid grid-cols-2 gap-2"
+              style={{ position: "relative", zIndex: 1, marginTop: "48px" }}
+            >
+              {socials.map((s) => (
+                <SocialPill key={s.label} {...s} />
+              ))}
+            </div>
+          </div>
+
+          {/* Right — heading + nav links + code block */}
+          <div className="reveal flex flex-col gap-6">
+            {/* ... /Contacts ... */}
             <span
               style={{
-                color: "transparent",
-                WebkitTextStroke: "1px rgba(255,255,255,0.2)",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "clamp(13px, 1.5vw, 18px)",
+                color: "rgba(255,255,255,0.7)",
+                letterSpacing: "0.1em",
               }}
             >
-              WORK
+              ... /Contacts ...
             </span>
-            <span style={{ color: "#2DD4BF" }}>.</span>
-          </h2>
 
-          <p
-            className="reveal text-white/40 max-w-md mb-12 leading-relaxed"
-            style={{ fontFamily: "'DM Sans', sans-serif" }}
-          >
-            I'm open to full-time roles and freelance projects. If you have
-            something in mind, reach out — I'd love to hear about it.
-          </p>
-
-          <div className="reveal grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mb-20">
-            {contactLinks.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex items-center justify-between p-5 border transition-all duration-200 hover:border-teal-300/30"
-                style={{
-                  borderColor: "rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.02)",
-                }}
-              >
-                <div>
-                  <p
-                    className="text-xs tracking-[0.2em] uppercase mb-1"
-                    style={{
-                      color: "rgba(255,255,255,0.3)",
-                      fontFamily: "'JetBrains Mono', monospace",
-                    }}
-                  >
-                    {item.label}
-                  </p>
-                  <p
-                    className="text-sm text-white/60 group-hover:text-white/90 transition-colors"
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                  >
-                    {item.value}
-                  </p>
-                </div>
-                <span
-                  className="text-lg transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1"
-                  style={{ color: "#2DD4BF" }}
+            {/* Nav links */}
+            <div className="flex items-center gap-6 flex-wrap">
+              {navLinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontWeight: 400,
+                    fontSize: "15px",
+                    color: "rgba(255,255,255,0.45)",
+                    padding: 0,
+                    transition: "color 0.2s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "white")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
                 >
-                  ↗
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
+                  {link.label}
+                </button>
+              ))}
+            </div>
 
-        {/* Right side — code block — unchanged */}
-        <div className="reveal">
-          <div
-            className="rounded-sm overflow-hidden"
-            style={{
-              border: "1px solid rgba(255,255,255,0.07)",
-              background: "rgba(255,255,255,0.02)",
-            }}
-          >
+            {/* Code block card */}
+            <CodeBlock />
+
+            {/* Footer */}
             <div
-              className="flex items-center gap-2 px-4 py-3"
-              style={{
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                background: "rgba(255,255,255,0.03)",
-              }}
+              className="reveal flex items-center justify-between pt-4"
+              style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
             >
               <span
-                className="w-3 h-3 rounded-full"
-                style={{ background: "rgba(255,255,255,0.1)" }}
-              />
-              <span
-                className="w-3 h-3 rounded-full"
-                style={{ background: "rgba(255,255,255,0.1)" }}
-              />
-              <span
-                className="w-3 h-3 rounded-full"
-                style={{ background: "rgba(255,255,255,0.1)" }}
-              />
-              <span
-                className="ml-4 text-xs"
                 style={{
-                  color: "rgba(255,255,255,0.2)",
                   fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "11px",
+                  color: "rgba(255,255,255,0.15)",
+                  letterSpacing: "0.1em",
                 }}
               >
-                developer.js
+                © 2025 Zob Dhillon
+              </span>
+              <span
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "11px",
+                  color: "rgba(255,255,255,0.15)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                // I was my own client.
               </span>
             </div>
-            <div
-              className="p-6"
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "13px",
-                lineHeight: "2",
-              }}
-            >
-              <div className="flex gap-4">
-                <span
-                  style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px" }}
-                >
-                  1
-                </span>
-                <span>
-                  <span style={{ color: "#2DD4BF" }}>const</span>
-                  <span style={{ color: "rgba(255,255,255,0.9)" }}>
-                    {" "}
-                    developer{" "}
-                  </span>
-                  <span style={{ color: "rgba(255,255,255,0.4)" }}>=</span>
-                  <span style={{ color: "rgba(255,255,255,0.9)" }}> {"{"}</span>
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <span
-                  style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px" }}
-                >
-                  2
-                </span>
-                <span className="pl-6">
-                  <span style={{ color: "rgba(255,255,255,0.5)" }}>name</span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
-                  <span style={{ color: "#2DD4BF", opacity: 0.8 }}>
-                    "Zob Dhillon"
-                  </span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <span
-                  style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px" }}
-                >
-                  3
-                </span>
-                <span className="pl-6">
-                  <span style={{ color: "rgba(255,255,255,0.5)" }}>role</span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
-                  <span style={{ color: "#2DD4BF", opacity: 0.8 }}>
-                    "Full Stack Developer"
-                  </span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <span
-                  style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px" }}
-                >
-                  4
-                </span>
-                <span className="pl-6">
-                  <span style={{ color: "rgba(255,255,255,0.5)" }}>email</span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
-                  <span style={{ color: "#2DD4BF", opacity: 0.8 }}>
-                    "zobbdhillon@gmail.com"
-                  </span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <span
-                  style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px" }}
-                >
-                  5
-                </span>
-                <span className="pl-6">
-                  <span style={{ color: "rgba(255,255,255,0.5)" }}>github</span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
-                  <span style={{ color: "#2DD4BF", opacity: 0.8 }}>
-                    "zobdhillon"
-                  </span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <span
-                  style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px" }}
-                >
-                  6
-                </span>
-                <span className="pl-6">
-                  <span style={{ color: "rgba(255,255,255,0.5)" }}>
-                    available
-                  </span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
-                  <span style={{ color: "#2DD4BF" }}>true</span>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <span
-                  style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px" }}
-                >
-                  7
-                </span>
-                <span style={{ color: "rgba(255,255,255,0.9)" }}>{"}"}</span>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        className="reveal border-t pt-8 flex items-center justify-between"
-        style={{ borderColor: "rgba(255,255,255,0.06)" }}
-      >
-        <span
-          className="text-xs tracking-widest"
-          style={{
-            color: "rgba(255,255,255,0.15)",
-            fontFamily: "'JetBrains Mono', monospace",
-          }}
-        >
-          © 2025 Zob Dhillon
-        </span>
-        <span
-          className="text-xs tracking-widest"
-          style={{
-            color: "rgba(255,255,255,0.15)",
-            fontFamily: "'JetBrains Mono', monospace",
-          }}
-        >
-          // I was my own client.
-        </span>
+        {/* ── MOBILE layout (<lg) ───────────────────────────────────────── */}
+        <div className="lg:hidden flex flex-col gap-8">
+
+          {/* ... /Contacts ... */}
+          <div className="reveal">
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "14px",
+                color: "rgba(255,255,255,0.7)",
+                letterSpacing: "0.1em",
+              }}
+            >
+              ... /Contacts ...
+            </span>
+          </div>
+
+          {/* Nav links */}
+          <div className="reveal flex items-center gap-5 flex-wrap">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "14px",
+                  color: "rgba(255,255,255,0.45)",
+                  padding: 0,
+                }}
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Code block */}
+          <div className="reveal">
+            <CodeBlock />
+          </div>
+
+          {/* Name */}
+          <div className="reveal relative" style={{ minHeight: "200px" }}>
+            <SideCircle side="left" />
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <h2
+                style={{
+                  fontFamily: "'Fira Code', monospace",
+                  fontWeight: 700,
+                  fontSize: "clamp(3.5rem, 18vw, 6rem)",
+                  color: "white",
+                  lineHeight: 0.95,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "16px",
+                }}
+              >
+                Zob<br />
+                <span style={{ paddingLeft: "clamp(40px, 15vw, 80px)" }}>Dhillon</span>
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: 300,
+                  fontSize: "14px",
+                  color: "rgba(255,255,255,0.4)",
+                }}
+              >
+                Full-stack developer
+              </p>
+            </div>
+          </div>
+
+          {/* Social pills — 2 column grid on mobile */}
+          <div className="reveal grid grid-cols-2 gap-2">
+            {socials.map((s) => (
+              <SocialPill key={s.label} {...s} />
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div
+            className="reveal flex items-center justify-between pt-4"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          >
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "10px",
+                color: "rgba(255,255,255,0.15)",
+              }}
+            >
+              © 2025 Zob Dhillon
+            </span>
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "10px",
+                color: "rgba(255,255,255,0.15)",
+              }}
+            >
+              // I was my own client.
+            </span>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 }

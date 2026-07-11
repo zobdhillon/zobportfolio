@@ -5,7 +5,7 @@ export default function SideCircle({
   nudgeX = "0px",
   nudgeY = "0px",
   showAmount = 50,
-  color = "rgba(255, 255, 255, 0.18)",
+  color = "rgba(255, 255, 255, 0.09)",
 }) {
   // How far off-screen: 100 - showAmount pushes it off, showAmount pulls it in
   const offscreen = 100 - showAmount;

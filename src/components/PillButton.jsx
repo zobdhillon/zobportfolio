@@ -1,34 +1,43 @@
 export default function PillButton({ label, onClick, href, target }) {
   const content = (
     <>
-      {/* White pill */}
+      {/* White pill — responsive padding/font */}
       <span
-        className="flex items-center px-16 py-3"
+        className="flex items-center transition-all duration-300"
         style={{
           borderRadius: "999px",
           background: "white",
           color: "#090909",
           fontFamily: "'DM Sans', sans-serif",
-          fontSize: "15px",
+          fontSize: "clamp(12px, 1.4vw, 15px)",
           fontStyle: "italic",
           whiteSpace: "nowrap",
+          paddingTop: "clamp(8px, 1vw, 12px)",
+          paddingBottom: "clamp(8px, 1vw, 12px)",
+          paddingLeft: "clamp(20px, 4vw, 64px)",
+          paddingRight: "clamp(20px, 4vw, 64px)",
         }}
       >
         {label}
       </span>
 
-      {/* Dark circle arrow */}
+      {/* Arrow circle — moves away from pill on hover, scales up slightly */}
       <span
-        className="flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+        className="
+          flex items-center justify-center flex-shrink-0
+          transition-all duration-300
+          group-hover:translate-x-1.5
+          group-hover:scale-110
+        "
         style={{
-          width: "46px",
-          height: "46px",
+          width:  "clamp(34px, 3.5vw, 46px)",
+          height: "clamp(34px, 3.5vw, 46px)",
           borderRadius: "50%",
           background: "white",
           border: "1px solid rgba(255,255,255,0.15)",
           color: "#090909",
-          fontSize: "16px",
-          fontWeight: 800
+          fontSize: "clamp(13px, 1.4vw, 16px)",
+          fontWeight: 800,
         }}
       >
         →
@@ -37,7 +46,7 @@ export default function PillButton({ label, onClick, href, target }) {
   );
 
   const className =
-    "group flex items-center gap-2 transition-all duration-200 hover:opacity-80";
+    "group flex items-center gap-2 transition-all duration-300 hover:gap-3";
   const style = {
     background: "transparent",
     border: "none",
@@ -47,13 +56,7 @@ export default function PillButton({ label, onClick, href, target }) {
 
   if (href) {
     return (
-      <a
-        href={href}
-        target={target}
-        rel="noreferrer"
-        className={className}
-        style={style}
-      >
+      <a href={href} target={target} rel="noreferrer" className={className} style={style}>
         {content}
       </a>
     );

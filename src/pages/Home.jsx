@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin } from "lucide-react";
 import PillButton from "../components/PillButton";
 import SideCircle from "../components/SideCircle";
+import rehearseImg from "../assets/rehearse.png";
+import devlogsImg from "../assets/devlogs.png";
+import resumeImg from "../assets/resume.png";
 
 const projects = [
   {
@@ -12,13 +15,7 @@ const projects = [
     tags: ["Laravel", "PHP", "MySQL", "Groq API"],
     live: "https://devlogs.42web.io",
     github: null,
-    terminal: [
-      { prompt: true, text: "project --open rehearse" },
-      { prompt: false, text: "→ AI interview practice app" },
-      { prompt: false, text: "→ laravel · mysql · groq api" },
-      { prompt: true, text: "status --check" },
-      { prompt: false, text: "→ live ✓" },
-    ],
+    image: rehearseImg,
   },
   {
     num: "01",
@@ -28,13 +25,7 @@ const projects = [
     tags: ["Laravel", "PHP", "MySQL", "Tailwind"],
     live: "https://devlogs.42web.io",
     github: "https://github.com/zobdhillon/devlogs",
-    terminal: [
-      { prompt: true, text: "project --open devlogs" },
-      { prompt: false, text: "→ developer social platform" },
-      { prompt: false, text: "→ laravel · php · mysql" },
-      { prompt: true, text: "status --check" },
-      { prompt: false, text: "→ live ✓  devlogs.42web.io" },
-    ],
+    image: devlogsImg,
   },
   {
     num: "02",
@@ -44,13 +35,7 @@ const projects = [
     tags: ["HTML", "CSS", "JavaScript"],
     live: "https://sabach.netlify.app/",
     github: null,
-    terminal: [
-      { prompt: true, text: "project --open saba" },
-      { prompt: false, text: "→ copywriter portfolio" },
-      { prompt: false, text: "→ html · css · javascript" },
-      { prompt: true, text: "status --check" },
-      { prompt: false, text: "→ live ✓  sabach.netlify.app" },
-    ],
+    image: resumeImg,
   },
 ];
 
@@ -65,7 +50,7 @@ function ProjectsPill({ onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="flex items-center gap-2 transition-all duration-200 hover:opacity-80"
+      className="group flex items-center gap-2"
       style={{
         background: "transparent",
         border: "none",
@@ -74,7 +59,7 @@ function ProjectsPill({ onClick }) {
       }}
     >
       <span
-        className="flex items-center py-2.5 sm:py-3"
+        className="flex items-center py-2.5 sm:py-3 transition-opacity duration-300 group-hover:opacity-80"
         style={{
           borderRadius: "999px",
           background: "white",
@@ -88,8 +73,9 @@ function ProjectsPill({ onClick }) {
       >
         Projects
       </span>
+
       <span
-        className="flex items-center justify-center flex-shrink-0"
+        className="flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-rotate-45"
         style={{
           width: "clamp(36px, 4vw, 48px)",
           height: "clamp(36px, 4vw, 48px)",
@@ -106,7 +92,6 @@ function ProjectsPill({ onClick }) {
   );
 }
 
-// ── Carousel ───────────────────────────────────────────────────────────────────
 function ProjectCarousel() {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(900);
@@ -136,7 +121,6 @@ function ProjectCarousel() {
   const peek = isMobile ? cardWidth * 0.72 : cardWidth * 0.58;
   const arrowSize = isMobile ? 36 : 48;
 
-  // Fixed: properly use useState, removed broken [setHoveredCenter] destructure
   const go = (dir) => setActive((prev) => (prev + dir + count) % count);
 
   return (
@@ -177,73 +161,36 @@ function ProjectCarousel() {
                   border: "1px solid rgba(255,255,255,0.13)",
                 }}
               >
-                {/* Terminal header */}
+
+                {/* Terminal body — always visible underneath, z-index 1 */}
                 <div
-                  className="flex items-center gap-2 px-4 py-2.5"
-                  style={{
-                    borderBottom: "1px solid rgba(255,255,255,0.06)",
-                    background: "rgba(255,255,255,0.02)",
-                  }}
+                  className="p-4"
+                  style={{ position: "relative", zIndex: 1, height: "100%" }}
                 >
-                  <span
-                    className="w-2.5 h-2.5 rounded-full"
-                    style={{ background: "#ff5f57" }}
-                  />
-                  <span
-                    className="w-2.5 h-2.5 rounded-full"
-                    style={{ background: "#febc2e" }}
-                  />
-                  <span
-                    className="w-2.5 h-2.5 rounded-full"
-                    style={{ background: "#28c840" }}
-                  />
-                  <span
-                    className="ml-3"
+                  <img
+                    src={project.image}
+                    alt={project.title}
                     style={{
-                      color: "rgba(255,255,255,0.2)",
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "10px",
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      filter: "grayscale(100%)",
                     }}
-                  >
-                    zob@portfolio ~ %
-                  </span>
+                  />
                 </div>
 
-                {/* Terminal body */}
                 <div
-                  className="p-4 transition-opacity duration-300 group-hover:opacity-0"
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: isMobile ? "11px" : "12.5px",
-                    lineHeight: "2",
-                  }}
-                >
-                  {project.terminal.map((line, idx) => (
-                    <div key={idx} className="flex gap-2">
-                      <span style={{ color: "#2DD4BF", flexShrink: 0 }}>
-                        {line.prompt ? "~" : " "}
-                      </span>
-                      <span
-                        style={{
-                          color: line.prompt
-                            ? "rgba(255,255,255,0.97)"
-                            : "rgba(255,255,255,0.46)",
-                        }}
-                      >
-                        {line.text}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Hover overlay */}
-                <div
-                  className="absolute top-0 right-0 h-full translate-x-full transition-transform duration-500 ease-out group-hover:translate-x-0 flex flex-col justify-between p-4"
+                  className="absolute top-0 right-0 h-full transition-transform duration-500 ease-out flex flex-col justify-between p-4"
                   style={{
                     width: isMobile ? "75%" : "65%",
-                    background: "rgba(15,15,20,0.75)",
-                    backdropFilter: "blur(20px)",
+                    background: "rgba(16, 16, 16, 0.79)",
+
                     borderLeft: "1px solid rgba(255,255,255,0.06)",
+                    zIndex: 3,
+                    transform: isCenter ? undefined : "translateX(100%)",
                   }}
                 >
                   <div>
@@ -260,7 +207,7 @@ function ProjectCarousel() {
                     <p
                       className="leading-relaxed mb-3"
                       style={{
-                        color: "rgba(255,255,255,0.67)",
+                        color: "rgba(255, 255, 255, 0.88)",
                         fontFamily: "'DM Sans', sans-serif",
                         fontSize: isMobile ? "10px" : "12px",
                       }}
@@ -275,7 +222,7 @@ function ProjectCarousel() {
                             color: "#2DD4BF",
                             fontFamily: "'JetBrains Mono', monospace",
                             fontSize: "9px",
-                            opacity: 0.6,
+                            opacity: 0.9,
                           }}
                         >
                           {tag}
@@ -305,12 +252,12 @@ function ProjectCarousel() {
         })}
       </div>
 
-      {/* Left arrow — outside overflow-hidden so never clipped */}
+      {/* Left arrow */}
       <button
         type="button"
         onClick={() => go(-1)}
         aria-label="Previous project"
-        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-all duration-200 hover:border-teal-400/50 hover:text-white"
+        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110"
         style={{
           width: arrowSize,
           height: arrowSize,
@@ -330,7 +277,7 @@ function ProjectCarousel() {
         type="button"
         onClick={() => go(1)}
         aria-label="Next project"
-        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-all duration-200 hover:border-teal-400/50 hover:text-white"
+        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110"
         style={{
           width: arrowSize,
           height: arrowSize,
@@ -377,8 +324,12 @@ export default function Home() {
         overflow: "hidden",
       }}
     >
-      {/* Half circle — right side, starts below navbar */}
-      <SideCircle side="right" align="center" size="80vh" showAmount={50} />
+      <SideCircle
+        side="right"
+        align="center"
+        size="clamp(300px, 60vw, 800px)"
+        showAmount={50}
+      />
 
       <div
         className="relative mx-auto flex w-full max-w-7xl flex-col px-4 sm:px-6 md:px-8 pb-10"
@@ -507,7 +458,7 @@ export default function Home() {
               href={href}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 px-4 sm:px-5 py-2 transition-colors duration-200"
+              className="flex items-center gap-2 px-4 sm:px-5 py-2 transition-all duration-300"
               style={{
                 borderRadius: "999px",
                 border: "1px solid rgba(255,255,255,0.12)",
@@ -517,13 +468,31 @@ export default function Home() {
                 fontSize: "11px",
                 letterSpacing: "0.05em",
               }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.border = "1px solid rgba(45,212,191,0.4)";
+                e.currentTarget.style.color = "rgba(255,255,255,0.9)";
+                e.currentTarget.style.background = "rgba(45,212,191,0.04)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.border =
+                  "1px solid rgba(255,255,255,0.12)";
+                e.currentTarget.style.color = "rgba(255,255,255,0.6)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+              }}
             >
               <Icon size={13} strokeWidth={1.8} />
               {label} ↗
             </a>
           ))}
+
+          {/* Available pill — subtle pulse, no extra hover needed */}
           <div
-            className="flex items-center gap-2 px-4 sm:px-5 py-2"
+            onClick={() =>
+              document
+                .getElementById("contact")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="flex items-center gap-2 px-4 sm:px-5 py-2 cursor-pointer"
             style={{
               borderRadius: "999px",
               border: "1px solid rgba(45,212,191,0.2)",
@@ -550,7 +519,7 @@ export default function Home() {
         {/* ── Carousel ──────────────────────────────────────────────────── */}
         <div className="reveal mt-8 flex-1 flex items-center justify-center min-h-0">
           <div className="relative w-full" style={{ zIndex: 1 }}>
-            <ProjectCarousel />
+            <ProjectCarousel rehearseImg={rehearseImg} />
           </div>
         </div>
       </div>
