@@ -46,7 +46,7 @@ export default function PillButton({ label, onClick, href, target }) {
   );
 
   const className =
-    "group flex items-center gap-2 transition-all duration-300 hover:gap-3";
+    "group flex items-center gap-2 transition-all duration-300 hover:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]";
   const style = {
     background: "transparent",
     border: "none",
@@ -63,7 +63,7 @@ export default function PillButton({ label, onClick, href, target }) {
   }
 
   return (
-    <button onClick={onClick} className={className} style={style}>
+    <button type="button" onClick={onClick} className={className} style={style}>
       {content}
     </button>
   );

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import MonoLabel from "./MonoLabel";
 
 const links = [
   { id: "home", label: "Home", num: "01" },
@@ -28,7 +29,12 @@ export default function Navbar() {
   }, []);
 
   const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    document.getElementById(id)?.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
     setOpen(false);
   };
 
@@ -39,13 +45,18 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo — left */}
-        <div
-          className="cursor-pointer flex-shrink-0 leading-none"
+        <button
+          type="button"
+          className="cursor-pointer flex-shrink-0 leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
           style={{
             fontFamily: "'Bebas Neue', sans-serif",
             letterSpacing: "0.1em",
+            background: "transparent",
+            border: "none",
+            padding: 0,
           }}
           onClick={() => scrollTo("home")}
+          aria-label="Go to home"
         >
           <div className="text-white" style={{ fontSize: "18px" }}>
             ZOBIA
@@ -53,7 +64,7 @@ export default function Navbar() {
           <div className="text-white" style={{ fontSize: "18px" }}>
             DHILLON
           </div>
-        </div>
+        </button>
 
         {/* Desktop links — absolutely centered */}
         <ul className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
@@ -62,16 +73,19 @@ export default function Navbar() {
             return (
               <li key={link.id}>
                 <button
+                  type="button"
                   onClick={() => scrollTo(link.id)}
-                  className={`flex items-center gap-1.5 text-sm tracking-widest uppercase transition-colors duration-200 bg-transparent border-none cursor-pointer ${
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex items-center gap-1.5 text-sm tracking-widest uppercase transition-colors duration-200 bg-transparent border-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909] ${
                     isActive
                       ? "text-white"
                       : "text-white/40 hover:text-white/80"
                   }`}
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  <span style={{ color: "#2DD4BF", fontSize: "10px" }}>/</span>
-                  <span>{link.label}</span>
+                  <MonoLabel style={{ color: "#2DD4BF", fontSize: "10px" }}>
+                    /
+                  </MonoLabel>
+                  <MonoLabel>{link.label}</MonoLabel>
                   {isActive && (
                     <span
                       className="ml-1 w-1 h-1 rounded-full inline-block"
@@ -104,9 +118,12 @@ export default function Navbar() {
 
         {/* Hamburger — mobile only */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
+          type="button"
+          className="md:hidden flex flex-col gap-1.5 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
         >
           <span
             className="block w-6 h-px transition-all duration-300"
@@ -135,23 +152,28 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div
+          id="mobile-menu"
           className="absolute top-full left-0 right-0 md:hidden py-6 px-6 flex flex-col gap-6"
           style={{
             background: "rgba(9,9,9,0.97)",
             borderTop: "1px solid rgba(45,212,191,0.1)",
           }}
+          aria-label="Mobile navigation"
         >
           {links.map((link) => (
             <button
               key={link.id}
+              type="button"
               onClick={() => scrollTo(link.id)}
-              className={`flex items-center gap-2 text-sm tracking-widest uppercase bg-transparent border-none cursor-pointer ${
+              aria-current={activeSection === link.id ? "page" : undefined}
+              className={`flex items-center gap-2 text-sm tracking-widest uppercase bg-transparent border-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909] ${
                 activeSection === link.id ? "text-white" : "text-white/40"
               }`}
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
-              <span style={{ color: "#2DD4BF", fontSize: "10px" }}>/</span>
-              {link.label}
+              <MonoLabel style={{ color: "#2DD4BF", fontSize: "10px" }}>
+                /
+              </MonoLabel>
+              <MonoLabel>{link.label}</MonoLabel>
             </button>
           ))}
         </div>

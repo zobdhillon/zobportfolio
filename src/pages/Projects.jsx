@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import CircleIconButton from "../components/CircleIconButton";
+import SectionLabel from "../components/SectionLabel";
 import SideCircle from "../components/SideCircle";
 import { Github, Globe } from "lucide-react";
+import useReveal from "../hooks/useReveal";
+import rehearseImg from "../assets/rehearse.png";
+import devlogsCoverImg from "../assets/devlogs-cover.png";
+import sabaPreviewImg from "../assets/saba-preview.png";
+import resumeImg from "../assets/resume.png";
 
 const projects = [
   {
@@ -22,6 +28,7 @@ const projects = [
     ],
     live: "https://rehearse-ai.up.railway.app",
     github: "https://github.com/zobdhillon/Rehearse",
+    fallbackImage: rehearseImg,
     useFrame: false,
     devices: {
       laptop: { url: "/demos/rehearse/dashboard.html", w: 1440, h: 900 },
@@ -47,6 +54,7 @@ const projects = [
     ],
     live: "https://devlogs-zobdhillon.up.railway.app/",
     github: "https://github.com/zobdhillon/devlogs",
+    fallbackImage: devlogsCoverImg,
     useFrame: false,
     devices: {
       laptop: {
@@ -79,6 +87,7 @@ const projects = [
     ],
     live: "https://sabach.netlify.app/",
     github: "https://github.com/zobdhillon/SabaCh",
+    fallbackImage: sabaPreviewImg,
     useFrame: false,
     devices: {
       laptop: { url: "https://sabach.netlify.app/", w: 1440, h: 900 },
@@ -104,6 +113,7 @@ const projects = [
     ],
     live: "https://zob-resume.up.railway.app/",
     github: "https://github.com/zobdhillon/Resume",
+    fallbackImage: resumeImg,
     useFrame: false,
     devices: {
       laptop: { url: "https://zob-resume.up.railway.app/", w: 1440, h: 900 },
@@ -114,10 +124,12 @@ const projects = [
 ];
 
 // ── Scaled iframe screen (shared by every device chrome) ──────────────────
-function DeviceScreen({ url, w, h, kind, screenRadius }) {
+function DeviceScreen({ url, w, h, kind, screenRadius, fallbackImage }) {
   const outerRef = useRef(null);
   const [zoom, setZoom] = useState(1);
-  const [loaded, setLoaded] = useState(false);
+  const [status, setStatus] = useState("loading");
+  const [imageError, setImageError] = useState(false);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     const el = outerRef.current;
@@ -132,8 +144,57 @@ function DeviceScreen({ url, w, h, kind, screenRadius }) {
     const ro = new ResizeObserver(resize);
     ro.observe(el);
 
-    return () => ro.disconnect();
-  }, [w]);
+    setStatus("loading");
+    setImageError(false);
+
+    const isExternalUrl = /^https?:\/\//i.test(url);
+    const isSameOrigin =
+      !isExternalUrl ||
+      new URL(url, window.location.origin).origin === window.location.origin;
+
+    if (!isSameOrigin) {
+      setStatus("error");
+      return () => {
+        ro.disconnect();
+        if (timeoutRef.current) {
+          window.clearTimeout(timeoutRef.current);
+        }
+      };
+    }
+
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = window.setTimeout(() => {
+      setStatus((current) => (current === "loaded" ? current : "error"));
+    }, 4000);
+
+    return () => {
+      ro.disconnect();
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [url, w, h]);
+
+  const handleLoad = () => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+    setStatus("loaded");
+  };
+
+  const handleError = () => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+    setStatus("error");
+  };
+
+  const showIframe = status === "loaded";
+  const showFallback = status === "error";
+  const showLoading = status === "loading";
 
   return (
     <div
@@ -144,9 +205,10 @@ function DeviceScreen({ url, w, h, kind, screenRadius }) {
         overflow: "hidden",
         borderRadius: screenRadius,
         background: "#000",
+        position: "relative",
       }}
     >
-      {!loaded && (
+      {showLoading && (
         <div
           style={{
             position: "absolute",
@@ -155,8 +217,52 @@ function DeviceScreen({ url, w, h, kind, screenRadius }) {
               "linear-gradient(90deg,#1a1a1a 25%,#252525 50%,#1a1a1a 75%)",
             backgroundSize: "200% 100%",
             animation: "shimmer 1.4s infinite",
+            zIndex: 1,
           }}
         />
+      )}
+
+      {showFallback && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 2,
+            background: "#0b0b0b",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "16px",
+          }}
+        >
+          {fallbackImage && !imageError ? (
+            <img
+              src={fallbackImage}
+              alt={`${kind} preview unavailable`}
+              onError={() => setImageError(true)}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: screenRadius,
+                display: "block",
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "12px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.55)",
+                textAlign: "center",
+              }}
+            >
+              Preview unavailable
+            </div>
+          )}
+        </div>
       )}
 
       <iframe
@@ -164,7 +270,8 @@ function DeviceScreen({ url, w, h, kind, screenRadius }) {
         title={`${kind}-preview`}
         loading="lazy"
         scrolling="no"
-        onLoad={() => setLoaded(true)}
+        onLoad={handleLoad}
+        onError={handleError}
         style={{
           width: `${w}px`,
           height: `${h}px`,
@@ -173,6 +280,9 @@ function DeviceScreen({ url, w, h, kind, screenRadius }) {
           zoom,
           transformOrigin: "top left",
           pointerEvents: "none",
+          opacity: showIframe ? 1 : 0.85,
+          position: "relative",
+          zIndex: 0,
         }}
       />
     </div>
@@ -180,13 +290,14 @@ function DeviceScreen({ url, w, h, kind, screenRadius }) {
 }
 
 // ── Device chrome — laptop hinge/base, tablet camera bezel, phone notch ───
-function DeviceFrame({ kind, url, w, h }) {
+function DeviceFrame({ kind, url, w, h, fallbackImage }) {
   const screen = (
     <DeviceScreen
       url={url}
       w={w}
       h={h}
       kind={kind}
+      fallbackImage={fallbackImage}
       screenRadius={
         kind === "laptop"
           ? "6px 6px 2px 2px"
@@ -321,6 +432,12 @@ const DEVICE_HOVER_CSS = `
     100% { background-position: -200% 0; }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes shimmer {
+      from, to { background-position: 0 0; }
+    }
+  }
+
   /* Laptop: wrapper handles the lift, screen + base each carry their own shadow */
   .device-shell { transition: transform .35s ease; cursor: pointer; }
   .device-shell:hover { transform: translateY(-8px); }
@@ -330,6 +447,21 @@ const DEVICE_HOVER_CSS = `
   }
   .device-shell:hover .device-glass {
     box-shadow: 0 22px 42px rgba(0,0,0,0.5);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .device-shell,
+    .device-glass,
+    .device-base,
+    .device-standalone {
+      transition: none;
+    }
+    .device-shell:hover,
+    .device-shell:hover .device-glass,
+    .device-shell:hover .device-base,
+    .device-standalone:hover {
+      transform: none;
+      box-shadow: none;
+    }
   }
   .device-base {
     box-shadow: 0 8px 14px rgba(0,0,0,0.3);
@@ -352,7 +484,7 @@ const DEVICE_HOVER_CSS = `
 `;
 
 // ── Visual column — iframes + live button ─────────────────────────────────
-function VisualCol({ devices, live }) {
+function VisualCol({ devices, live, fallbackImage }) {
   const hasLaptop = !!devices?.laptop;
   const hasTablet = !!devices?.tablet;
   const hasPhone = !!devices?.phone;
@@ -368,6 +500,7 @@ function VisualCol({ devices, live }) {
             url={devices.laptop.url}
             w={devices.laptop.w}
             h={devices.laptop.h}
+            fallbackImage={devices.laptop.fallbackImage || fallbackImage}
           />
         </div>
 
@@ -385,6 +518,7 @@ function VisualCol({ devices, live }) {
             url={devices.tablet.url}
             w={devices.tablet.w}
             h={devices.tablet.h}
+            fallbackImage={devices.tablet.fallbackImage || fallbackImage}
           />
         </div>
 
@@ -402,6 +536,7 @@ function VisualCol({ devices, live }) {
             url={devices.phone.url}
             w={devices.phone.w}
             h={devices.phone.h}
+            fallbackImage={devices.phone.fallbackImage || fallbackImage}
           />
         </div>
 
@@ -436,6 +571,7 @@ function VisualCol({ devices, live }) {
             url={primary.url}
             w={primary.w}
             h={primary.h}
+            fallbackImage={primary.fallbackImage || fallbackImage}
           />
         )}
 
@@ -471,6 +607,7 @@ function VisualCol({ devices, live }) {
             url={devices.phone.url}
             w={devices.phone.w}
             h={devices.phone.h}
+            fallbackImage={devices.phone.fallbackImage || fallbackImage}
           />
         </div>
       )}
@@ -609,12 +746,12 @@ function TextCol({ project }) {
 
 // ── Project block ─────────────────────────────────────────────────────────
 function ProjectBlock({ project }) {
-  const { flip, useFrame, devices, live } = project;
+  const { flip, useFrame, devices, live, fallbackImage } = project;
 
   const visualEl = useFrame ? (
     <StaticVisual src={project.staticSrc} live={live} />
   ) : (
-    <VisualCol devices={devices} live={live} />
+    <VisualCol devices={devices} live={live} fallbackImage={fallbackImage} />
   );
 
   const showDecor = project.num === "00" || project.num === "03";
@@ -674,27 +811,7 @@ function ProjectBlock({ project }) {
 
 // ── Page ──────────────────────────────────────────────────────────────────
 export default function Projects() {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-          } else {
-            entry.target.classList.remove("show");
-          }
-        });
-      },
-      { threshold: 0.08 },
-    );
-
-    const reveals = ref.current?.querySelectorAll(".reveal");
-    reveals?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  const ref = useReveal({ threshold: 0.08 });
 
   return (
     <section
@@ -717,16 +834,7 @@ export default function Projects() {
       >
         {/* Heading */}
         <div className="reveal text-center mb-16">
-          <span
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "clamp(13px, 1.5vw, 18px)",
-              color: "rgba(255,255,255,0.75)",
-              letterSpacing: "0.1em",
-            }}
-          >
-            ... /Projects ...
-          </span>
+          <SectionLabel>... /Projects ...</SectionLabel>
         </div>
 
         {projects.map((project, i) => (

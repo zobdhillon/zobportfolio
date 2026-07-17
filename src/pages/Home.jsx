@@ -5,6 +5,7 @@ import SideCircle from "../components/SideCircle";
 import rehearseImg from "../assets/rehearse.png";
 import devlogsImg from "../assets/devlogs.png";
 import resumeImg from "../assets/resume.png";
+import useReveal from "../hooks/useReveal";
 
 const projects = [
   {
@@ -60,7 +61,8 @@ function ProjectsPill({ onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="group flex items-center gap-2"
+      aria-label="Go to projects"
+      className="group flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
       style={{
         background: "transparent",
         border: "none",
@@ -308,7 +310,7 @@ function ProjectCarousel() {
         type="button"
         onClick={() => go(-1)}
         aria-label="Previous project"
-        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110"
+        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
         style={{
           width: arrowSize,
           height: arrowSize,
@@ -328,7 +330,7 @@ function ProjectCarousel() {
         type="button"
         onClick={() => go(1)}
         aria-label="Next project"
-        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110"
+        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
         style={{
           width: arrowSize,
           height: arrowSize,
@@ -348,37 +350,16 @@ function ProjectCarousel() {
 
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function Home() {
-  const heroRef = useRef(null);
+  const heroRef = useReveal();
 
-  // Reveal-on-scroll: every .reveal element inside heroRef fades up when it
-  // enters the viewport and hides again when it leaves, so the animation
-  // replays every time the user scrolls past it (not just on first mount).
-  useEffect(() => {
-    const els = heroRef.current?.querySelectorAll(".reveal");
-    if (!els || els.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-          } else {
-            entry.target.classList.remove("show");
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-      },
-    );
-
-    els.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollToProjects = () =>
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+  const scrollToProjects = () => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    return document.getElementById("projects")?.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
+  };
 
   return (
     <main
@@ -525,7 +506,8 @@ export default function Home() {
               href={href}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 px-4 sm:px-5 py-2 transition-all duration-300"
+              aria-label={`${label} external link`}
+              className="flex items-center gap-2 px-4 sm:px-5 py-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
               style={{
                 borderRadius: "999px",
                 border: "1px solid rgba(255,255,255,0.12)",
@@ -555,13 +537,18 @@ export default function Home() {
           ))}
 
           {/* Available pill — subtle pulse, no extra hover needed */}
-          <div
-            onClick={() =>
-              document
-                .getElementById("contact")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="flex items-center gap-2 px-4 sm:px-5 py-2 cursor-pointer"
+          <button
+            type="button"
+            onClick={() => {
+              const prefersReducedMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+              ).matches;
+              document.getElementById("contact")?.scrollIntoView({
+                behavior: prefersReducedMotion ? "auto" : "smooth",
+              });
+            }}
+            aria-label="Go to contact section"
+            className="flex items-center gap-2 px-4 sm:px-5 py-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
             style={{
               borderRadius: "999px",
               border: "1px solid rgba(45,212,191,0.2)",
@@ -584,13 +571,13 @@ export default function Home() {
               />
             </span>
             Available for work
-          </div>
+          </button>
         </div>
 
         {/* ── Carousel ──────────────────────────────────────────────────── */}
         <div className="reveal mt-8 flex-1 flex items-center justify-center min-h-0">
           <div className="relative w-full" style={{ zIndex: 1 }}>
-            <ProjectCarousel rehearseImg={rehearseImg} />
+            <ProjectCarousel />
           </div>
         </div>
       </div>

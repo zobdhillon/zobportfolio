@@ -13,6 +13,11 @@
   html {
     scroll-behavior: smooth;
   }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
   body {
     background-color: #090909;
     color: #f0f0f0;
@@ -32,6 +37,13 @@
   transition: transform 0.1s ease;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .cursor-ring {
+    transition: none;
+  }
+}
+
 .cursor-ring {
   width: 30px;
   height: 30px;
@@ -44,23 +56,6 @@
   transition:
     left 0.08s ease,
     top 0.08s ease;
-}
-
-.marquee-wrap {
-  overflow: hidden;
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 20s linear infinite;
-}
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 ::-webkit-scrollbar {

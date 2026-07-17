@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
 import CircleIconButton from "../components/CircleIconButton";
 import SideCircle from "../components/SideCircle";
+import SkillCard from "../components/SkillCard";
 import profilePic from "../assets/profile-pic.png";
+import useReveal from "../hooks/useReveal";
 
 // ── Skill card data ────────────────────────────────────────────────────────────
 const frontEnd = {
@@ -57,78 +58,12 @@ function GithubFilled({ size = 16, color = "rgba(255,255,255,0.9)" }) {
   );
 }
 
-// ── Reusable skill card ────────────────────────────────────────────────────────
-function SkillCard({
-  title,
-  techs,
-  style = {},
-  titleStyle = {},
-  techStyle = {},
-  className = "",
-}) {
-  return (
-    <div
-      className={className}
-      style={{
-        background: "#0e0e0e",
-        border: "1px solid rgba(255,255,255,0.15)",
-        borderRadius: "12px",
-        padding: "24px",
-        ...style,
-      }}
-    >
-      <h3
-        style={{
-          fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: "22px",
-          letterSpacing: "0.08em",
-          color: "rgba(255,255,255,0.97)",
-          marginBottom: "12px",
-          ...titleStyle,
-        }}
-      >
-        {title}
-      </h3>
-      <p
-        style={{
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: "12px",
-          lineHeight: "2",
-          color: "rgba(255, 255, 255, 0.86)",
-          ...techStyle,
-        }}
-      >
-        {techs.join(" / ")}
-      </p>
-    </div>
-  );
-}
-
 // ── Main component ─────────────────────────────────────────────────────────────
 export default function About() {
-  const sectionRef = useRef(null);
-
-  // Reveal animation — triggers when each element scrolls further into view
-  useEffect(() => {
-    const elements = sectionRef.current?.querySelectorAll(".reveal");
-    if (!elements) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-          } else {
-            entry.target.classList.remove("show");
-          }
-        });
-      },
-      { threshold: 0.25, rootMargin: "0px 0px -15% 0px" },
-    );
-
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const sectionRef = useReveal({
+    threshold: 0.25,
+    rootMargin: "0px 0px -15% 0px",
+  });
 
   return (
     <section
@@ -336,6 +271,13 @@ export default function About() {
         .reveal.show {
           opacity: 1;
           transform: translateY(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .reveal {
+            opacity: 1;
+            transform: none;
+            transition: none;
+          }
         }
 
         .portrait-box {

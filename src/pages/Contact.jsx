@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
 import { Github, Linkedin, Mail, Send } from "lucide-react";
+import SectionLabel from "../components/SectionLabel";
 import SideCircle from "../components/SideCircle";
+import SocialPill from "../components/SocialPill";
+import useReveal from "../hooks/useReveal";
 
 const socials = [
   { label: "GitHub", href: "https://github.com/zobdhillon", icon: Github },
@@ -16,8 +18,14 @@ const navLinks = [
   { label: "Contact", id: "contact" },
 ];
 
-const scrollTo = (id) =>
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+const scrollTo = (id) => {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  return document.getElementById(id)?.scrollIntoView({
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+  });
+};
 
 // ── Code block (developer.js) ─────────────────────────────────────────────
 function CodeBlock() {
@@ -174,64 +182,9 @@ function CodeBlock() {
   );
 }
 
-// ── Social pill ───────────────────────────────────────────────────────────
-function SocialPill({ label, href, icon: Icon }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="flex items-center justify-center gap-2 transition-all duration-200"
-      style={{
-        borderRadius: "999px",
-        border: "1px solid rgba(255,255,255,0.12)",
-        background: "rgba(15,15,15,0.92)",
-        color: "rgba(255,255,255,0.6)",
-        fontFamily: "'DM Sans', sans-serif",
-        fontStyle: "italic",
-        fontSize: "13px",
-        padding: "10px 20px",
-        textDecoration: "none",
-        whiteSpace: "nowrap",
-        position: "relative",
-        zIndex: 1,
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "rgba(45,212,191,0.4)";
-        e.currentTarget.style.color = "#2DD4BF";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
-        e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-      }}
-    >
-      <Icon size={14} strokeWidth={1.8} />
-      {label}
-    </a>
-  );
-}
-
 // ── Page ──────────────────────────────────────────────────────────────────
 export default function Contact() {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-          } else {
-            entry.target.classList.remove("show");
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
-    const reveals = ref.current?.querySelectorAll(".reveal");
-    reveals?.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const ref = useReveal({ threshold: 0.1 });
 
   return (
     <section
@@ -316,23 +269,24 @@ export default function Contact() {
           {/* Right — heading + nav links + code block */}
           <div className="reveal flex flex-col gap-6">
             {/* ... /Contacts ... */}
-            <span
+            <SectionLabel
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "clamp(13px, 1.5vw, 18px)",
                 color: "rgba(255,255,255,0.7)",
-                letterSpacing: "0.1em",
               }}
             >
               ... /Contacts ...
-            </span>
+            </SectionLabel>
 
             {/* Nav links */}
             <div className="flex items-center gap-6 flex-wrap">
               {navLinks.map((link) => (
                 <button
                   key={link.id}
+                  type="button"
                   onClick={() => scrollTo(link.id)}
+                  aria-label={`Go to ${link.label} section`}
+                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
                   style={{
                     background: "none",
                     border: "none",
@@ -390,16 +344,14 @@ export default function Contact() {
         <div className="lg:hidden flex flex-col gap-8">
           {/* ... /Contacts ... */}
           <div className="reveal">
-            <span
+            <SectionLabel
               style={{
-                fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "14px",
                 color: "rgba(255,255,255,0.7)",
-                letterSpacing: "0.1em",
               }}
             >
               ... /Contacts ...
-            </span>
+            </SectionLabel>
           </div>
 
           {/* Nav links */}
@@ -407,7 +359,10 @@ export default function Contact() {
             {navLinks.map((link) => (
               <button
                 key={link.id}
+                type="button"
                 onClick={() => scrollTo(link.id)}
+                aria-label={`Go to ${link.label} section`}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
                 style={{
                   background: "none",
                   border: "none",

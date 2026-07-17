@@ -68,6 +68,7 @@ export default function CircleIconButton({
           target={target}
           rel={rel}
           aria-label={label}
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
           style={rightCircleStyle}
           onMouseEnter={(e) => {
             handleMouseEnter(e);
@@ -85,6 +86,7 @@ export default function CircleIconButton({
           type="button"
           aria-label={label}
           onClick={onClick}
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
           style={rightCircleStyle}
           onMouseEnter={(e) => {
             handleMouseEnter(e);
