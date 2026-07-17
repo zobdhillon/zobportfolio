@@ -3,17 +3,17 @@ import { Github, Linkedin, Mail, Send } from "lucide-react";
 import SideCircle from "../components/SideCircle";
 
 const socials = [
-  { label: "GitHub",   href: "https://github.com/zobdhillon",        icon: Github },
-  { label: "LinkedIn", href: "https://linkedin.com",                  icon: Linkedin },
-  { label: "E-mail",   href: "mailto:zobbdhillon@gmail.com",          icon: Mail },
-  { label: "Telegram", href: "https://t.me/zobdhillon",               icon: Send },
+  { label: "GitHub", href: "https://github.com/zobdhillon", icon: Github },
+  { label: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
+  { label: "E-mail", href: "mailto:zobbdhillon@gmail.com", icon: Mail },
+  { label: "Telegram", href: "https://t.me/zobdhillon", icon: Send },
 ];
 
 const navLinks = [
-  { label: "Main",     id: "home" },
-  { label: "About",    id: "about" },
+  { label: "Main", id: "home" },
+  { label: "About", id: "about" },
   { label: "Projects", id: "projects" },
-  { label: "Contact",  id: "contact" },
+  { label: "Contact", id: "contact" },
 ];
 
 const scrollTo = (id) =>
@@ -22,13 +22,85 @@ const scrollTo = (id) =>
 // ── Code block (developer.js) ─────────────────────────────────────────────
 function CodeBlock() {
   const lines = [
-    { num: 1, content: <><span style={{ color: "#2DD4BF" }}>const</span><span style={{ color: "rgba(255,255,255,0.9)" }}> developer </span><span style={{ color: "rgba(255,255,255,0.4)" }}>=</span><span style={{ color: "rgba(255,255,255,0.9)" }}> {"{"}</span></> },
-    { num: 2, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>name</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"Zob Dhillon"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
-    { num: 3, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>role</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"Full Stack Developer"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
-    { num: 4, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>email</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"zobbdhillon@gmail.com"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
-    { num: 5, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>github</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF", opacity: 0.85 }}>"zobdhillon"</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
-    { num: 6, indent: true, content: <><span style={{ color: "rgba(255,255,255,0.5)" }}>available</span><span style={{ color: "rgba(255,255,255,0.3)" }}>: </span><span style={{ color: "#2DD4BF" }}>true</span><span style={{ color: "rgba(255,255,255,0.3)" }}>,</span></> },
-    { num: 7, content: <span style={{ color: "rgba(255,255,255,0.9)" }}>{"}"}</span> },
+    {
+      num: 1,
+      content: (
+        <>
+          <span style={{ color: "#2DD4BF" }}>const</span>
+          <span style={{ color: "rgba(255,255,255,0.9)" }}> developer </span>
+          <span style={{ color: "rgba(255,255,255,0.4)" }}>=</span>
+          <span style={{ color: "rgba(255,255,255,0.9)" }}> {"{"}</span>
+        </>
+      ),
+    },
+    {
+      num: 2,
+      indent: true,
+      content: (
+        <>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>name</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
+          <span style={{ color: "#2DD4BF", opacity: 0.85 }}>"Zob Dhillon"</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
+        </>
+      ),
+    },
+    {
+      num: 3,
+      indent: true,
+      content: (
+        <>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>role</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
+          <span style={{ color: "#2DD4BF", opacity: 0.85 }}>
+            "Full Stack Developer"
+          </span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
+        </>
+      ),
+    },
+    {
+      num: 4,
+      indent: true,
+      content: (
+        <>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>email</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
+          <span style={{ color: "#2DD4BF", opacity: 0.85 }}>
+            "zobbdhillon@gmail.com"
+          </span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
+        </>
+      ),
+    },
+    {
+      num: 5,
+      indent: true,
+      content: (
+        <>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>github</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
+          <span style={{ color: "#2DD4BF", opacity: 0.85 }}>"zobdhillon"</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
+        </>
+      ),
+    },
+    {
+      num: 6,
+      indent: true,
+      content: (
+        <>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>available</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>: </span>
+          <span style={{ color: "#2DD4BF" }}>true</span>
+          <span style={{ color: "rgba(255,255,255,0.3)" }}>,</span>
+        </>
+      ),
+    },
+    {
+      num: 7,
+      content: <span style={{ color: "rgba(255,255,255,0.9)" }}>{"}"}</span>,
+    },
   ];
 
   return (
@@ -36,8 +108,11 @@ function CodeBlock() {
       style={{
         borderRadius: "16px",
         border: "1px solid rgba(255,255,255,0.08)",
-        background: "rgba(255,255,255,0.02)",
+        background: "rgba(15,15,15,0.92)",
+        backdropFilter: "blur(12px)",
         overflow: "hidden",
+        position: "relative",
+        zIndex: 1,
       }}
     >
       {/* Terminal header */}
@@ -45,25 +120,50 @@ function CodeBlock() {
         className="flex items-center gap-2 px-4 py-3"
         style={{
           borderBottom: "1px solid rgba(255,255,255,0.06)",
-          background: "rgba(255,255,255,0.02)",
+          background: "rgba(10,10,10,0.6)",
         }}
       >
-        <span className="w-3 h-3 rounded-full" style={{ background: "#ff5f57" }} />
-        <span className="w-3 h-3 rounded-full" style={{ background: "#febc2e" }} />
-        <span className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
+        <span
+          className="w-3 h-3 rounded-full"
+          style={{ background: "#ff5f57" }}
+        />
+        <span
+          className="w-3 h-3 rounded-full"
+          style={{ background: "#febc2e" }}
+        />
+        <span
+          className="w-3 h-3 rounded-full"
+          style={{ background: "#28c840" }}
+        />
         <span
           className="ml-4 text-xs"
-          style={{ color: "rgba(255,255,255,0.2)", fontFamily: "'JetBrains Mono', monospace" }}
+          style={{
+            color: "rgba(255,255,255,0.2)",
+            fontFamily: "'JetBrains Mono', monospace",
+          }}
         >
           developer.js
         </span>
       </div>
 
       {/* Code */}
-      <div className="p-5" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", lineHeight: "2" }}>
+      <div
+        className="p-5"
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "13px",
+          lineHeight: "2",
+        }}
+      >
         {lines.map((line) => (
           <div key={line.num} className="flex gap-4">
-            <span style={{ color: "rgba(255,255,255,0.15)", minWidth: "20px", userSelect: "none" }}>
+            <span
+              style={{
+                color: "rgba(255,255,255,0.15)",
+                minWidth: "20px",
+                userSelect: "none",
+              }}
+            >
               {line.num}
             </span>
             <span className={line.indent ? "pl-6" : ""}>{line.content}</span>
@@ -85,7 +185,7 @@ function SocialPill({ label, href, icon: Icon }) {
       style={{
         borderRadius: "999px",
         border: "1px solid rgba(255,255,255,0.12)",
-        background: "rgba(255,255,255,0.03)",
+        background: "rgba(15,15,15,0.92)",
         color: "rgba(255,255,255,0.6)",
         fontFamily: "'DM Sans', sans-serif",
         fontStyle: "italic",
@@ -93,6 +193,8 @@ function SocialPill({ label, href, icon: Icon }) {
         padding: "10px 20px",
         textDecoration: "none",
         whiteSpace: "nowrap",
+        position: "relative",
+        zIndex: 1,
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "rgba(45,212,191,0.4)";
@@ -119,11 +221,12 @@ export default function Contact() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("show");
-            observer.unobserve(entry.target);
+          } else {
+            entry.target.classList.remove("show");
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     const reveals = ref.current?.querySelectorAll(".reveal");
     reveals?.forEach((el) => observer.observe(el));
@@ -134,21 +237,39 @@ export default function Contact() {
     <section
       ref={ref}
       id="contact"
-      style={{ background: "#090909", position: "relative", overflow: "hidden" }}
+      style={{
+        background: "#090909",
+        position: "relative",
+        overflow: "hidden",
+        minHeight: "100vh",
+        zIndex: 0,
+      }}
     >
+      <SideCircle
+        side="left"
+        align="top"
+        size="650px"
+        showAmount={70}
+        nudgeY="180px"
+      />
+
+      {/* Content - on top of everything */}
       <div
         className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8"
-        style={{ paddingTop: "clamp(80px, 10vw, 140px)", paddingBottom: "clamp(60px, 8vw, 100px)" }}
+        style={{
+          position: "relative",
+          paddingTop: "clamp(80px, 10vw, 140px)",
+          paddingBottom: "clamp(60px, 8vw, 100px)",
+        }}
       >
-
         {/* ── DESKTOP layout (lg+) ──────────────────────────────────────── */}
         <div className="hidden lg:grid lg:grid-cols-2 lg:gap-20 lg:items-start">
-
-          {/* Left — huge name + subtitle + SideCircle */}
-          <div className="reveal relative flex flex-col justify-between" style={{ minHeight: "520px" }}>
-            <SideCircle side="left" />
-
-            <div style={{ position: "relative", zIndex: 1 }}>
+          {/* Left — huge name + subtitle */}
+          <div
+            className="reveal relative flex flex-col justify-between"
+            style={{ minHeight: "520px", position: "relative", zIndex: 1 }}
+          >
+            <div style={{ position: "relative" }}>
               <h2
                 style={{
                   fontFamily: "'Fira Code', monospace",
@@ -160,7 +281,9 @@ export default function Contact() {
                   marginBottom: "24px",
                 }}
               >
-                Zob<br />Dhillon
+                Zob
+                <br />
+                Dhillon
               </h2>
 
               <p
@@ -173,14 +296,16 @@ export default function Contact() {
                   maxWidth: "160px",
                 }}
               >
-                Full-stack<br />developer
+                Full-stack
+                <br />
+                developer
               </p>
             </div>
 
             {/* Social pills — desktop 2 column grid */}
             <div
               className="reveal grid grid-cols-2 gap-2"
-              style={{ position: "relative", zIndex: 1, marginTop: "48px" }}
+              style={{ position: "relative", marginTop: "48px", zIndex: 1 }}
             >
               {socials.map((s) => (
                 <SocialPill key={s.label} {...s} />
@@ -220,7 +345,9 @@ export default function Contact() {
                     transition: "color 0.2s",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "white")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "rgba(255,255,255,0.45)")
+                  }
                 >
                   {link.label}
                 </button>
@@ -261,7 +388,6 @@ export default function Contact() {
 
         {/* ── MOBILE layout (<lg) ───────────────────────────────────────── */}
         <div className="lg:hidden flex flex-col gap-8">
-
           {/* ... /Contacts ... */}
           <div className="reveal">
             <span
@@ -304,8 +430,7 @@ export default function Contact() {
 
           {/* Name */}
           <div className="reveal relative" style={{ minHeight: "200px" }}>
-            <SideCircle side="left" />
-            <div style={{ position: "relative", zIndex: 1 }}>
+            <div style={{ position: "relative" }}>
               <h2
                 style={{
                   fontFamily: "'Fira Code', monospace",
@@ -317,8 +442,11 @@ export default function Contact() {
                   marginBottom: "16px",
                 }}
               >
-                Zob<br />
-                <span style={{ paddingLeft: "clamp(40px, 15vw, 80px)" }}>Dhillon</span>
+                Zob
+                <br />
+                <span style={{ paddingLeft: "clamp(40px, 15vw, 80px)" }}>
+                  Dhillon
+                </span>
               </h2>
               <p
                 style={{
@@ -365,7 +493,6 @@ export default function Contact() {
             </span>
           </div>
         </div>
-
       </div>
     </section>
   );

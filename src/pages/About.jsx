@@ -118,7 +118,8 @@ export default function About() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("show");
-            observer.unobserve(entry.target);
+          } else {
+            entry.target.classList.remove("show");
           }
         });
       },
@@ -139,10 +140,15 @@ export default function About() {
         paddingTop: "72px",
         paddingBottom: "60px",
         position: "relative",
+        zIndex: 0,
         overflow: "hidden",
       }}
     >
-      {/* Decorative corner arc — mirrors navbar quarter-circle language */}
+      {/* Decorative corner arc — mirrors navbar quarter-circle language.
+          Section above has position: relative + zIndex: 0, which forms its
+          own stacking context — that's what makes SideCircle's internal
+          zIndex: -1 land just above this section's own background, and
+          still behind every other element inside the section. */}
       <SideCircle
         side="left"
         align="top"
@@ -346,7 +352,7 @@ export default function About() {
             grid-template-columns: 1fr 1.2fr !important;
             gap: 16px !important;
           }
-          #about .reveal:first-child > p:last-of-type {
+          #about .reveal:first-child > div:last-child {
             display: none;
           }
           #about > div > div:last-child {

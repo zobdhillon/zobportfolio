@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Software Engineer Interview · Rehearse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .chat-topbar {
+        height: 64px;
+        background: var(--bg-topbar);
+        border-bottom: 1px solid var(--card-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        flex-shrink: 0;
+      }
+      .chat-topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .hamburger {
+        color: var(--text-secondary);
+      }
+      .chat-title {
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .chat-topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .chat-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 20px 12px;
+        max-width: 780px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .sim-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: var(--radius-lg);
+        padding: 22px 24px;
+        margin-bottom: 22px;
+      }
+      .sim-title {
+        font-size: 19px;
+        font-weight: 800;
+        margin: 8px 0 10px;
+      }
+      .sim-desc {
+        color: var(--text-secondary);
+        font-size: 14.5px;
+        line-height: 1.55;
+        margin-bottom: 18px;
+      }
+
+      .msg-row {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 6px;
+      }
+      .msg-row.ai {
+        align-items: flex-start;
+      }
+      .msg-row.user {
+        align-items: flex-end;
+      }
+
+      .bubble {
+        max-width: 78%;
+        padding: 16px 18px;
+        font-size: 15px;
+        line-height: 1.55;
+        margin-bottom: 8px;
+      }
+      .bubble.ai {
+        background: var(--card-bg-soft);
+        border: 1px solid var(--card-border);
+        border-radius: 18px 18px 18px 4px;
+        color: var(--text-primary);
+      }
+      .bubble.user {
+        background: var(--accent);
+        color: #06231f;
+        border-radius: 18px 18px 4px 18px;
+        font-weight: 500;
+      }
+      .ai-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1.5px solid var(--accent);
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        margin-bottom: 16px;
+      }
+
+      .chat-input-bar {
+        flex-shrink: 0;
+        padding: 14px 20px 22px;
+        max-width: 780px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .input-shell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 999px;
+        padding: 10px 10px 10px 22px;
+      }
+      .input-shell input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--text-primary);
+        font-size: 14.5px;
+        font-family: inherit;
+      }
+      .input-shell input::placeholder {
+        color: var(--text-tertiary);
+      }
+      .char-count {
+        color: var(--text-tertiary);
+        font-size: 13px;
+      }
+      .mic-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid rgba(45, 212, 191, 0.35);
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .send-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #06231f;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="chat-topbar">
+      <div class="chat-topbar-left">
+        <svg
+          class="hamburger"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M4 6h16M4 12h16M4 18h16"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+        </svg>
+        <div class="chat-title">Software Engineer Interview</div>
+      </div>
+      <div class="chat-topbar-right">
+        <svg
+          class="moon-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          width="19"
+          height="19"
+        >
+          <path
+            d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <div
+          class="topbar-avatar"
+          style="width: 32px; height: 32px; font-size: 12.5px"
+        >
+          Z
+        </div>
+      </div>
+    </header>
+
+    <div class="chat-scroll">
+      <div class="msg-row ai">
+        <div class="bubble ai">
+          Thanks for joining. Tell me about your background as a senior
+          engineer.
+        </div>
+        <div class="ai-avatar">AI</div>
+      </div>
+
+      <div class="msg-row user">
+        <div class="bubble user">
+          I'm a full-stack engineer with 8+ years in scalable systems and team
+          leadership.
+        </div>
+      </div>
+
+      <div class="msg-row ai">
+        <div class="bubble ai">
+          Can you walk me through a project with a difficult architectural
+          trade-off?
+        </div>
+        <div class="ai-avatar">AI</div>
+      </div>
+
+      <div class="msg-row user">
+        <div class="bubble user">
+          We had to choose between a monolith and microservices for our payment
+          system.
+        </div>
+      </div>
+
+      <div class="msg-row ai">
+        <div class="bubble ai">
+          What was the most important thing you learned from that experience?
+        </div>
+        <div class="ai-avatar">AI</div>
+      </div>
+    </div>
+
+    <div class="chat-input-bar">
+      <div class="input-shell">
+        <input
+          type="text"
+          placeholder="Reply as yourself in Software Engi..."
+        />
+        <span class="char-count">2/10</span>
+        <button class="mic-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 2a3 3 0 00-3 3v6a3 3 0 006 0V5a3 3 0 00-3-3z"
+              stroke="currentColor"
+              stroke-width="1.6"
+            />
+            <path
+              d="M19 10v1a7 7 0 01-14 0v-1M12 18v4"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+        <button class="send-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M22 2L11 13"
+              stroke="#06231f"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M22 2l-7 20-4-9-9-4 20-7z"
+              stroke="#06231f"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

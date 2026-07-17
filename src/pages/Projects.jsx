@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import CircleIconButton from "../components/CircleIconButton";
+import SideCircle from "../components/SideCircle";
 import { Github, Globe } from "lucide-react";
-
-import rehearseFrameImg from "../assets/rehearse-frame.png";
-import devActivityImg from "../assets/dev-activity.png";
-import chatBotImg from "../assets/chat-bot.png";
 
 const projects = [
   {
@@ -25,9 +22,12 @@ const projects = [
     ],
     live: "https://rehearse-ai.up.railway.app",
     github: "https://github.com/zobdhillon/Rehearse",
-    illustration: null, // no inline illustration for Rehearse
-    useFrame: true, // use static rehearse-frame.png
-    devices: null,
+    useFrame: false,
+    devices: {
+      laptop: { url: "/demos/rehearse/dashboard.html", w: 1440, h: 900 },
+      tablet: { url: "/demos/rehearse/scenarios.html", w: 834, h: 1194 },
+      phone: { url: "/demos/rehearse/chat.html", w: 420, h: 820 },
+    },
     flip: false,
   },
   {
@@ -45,13 +45,20 @@ const projects = [
         sharing and an activity feed — all built with Laravel and Tailwind.
       </>,
     ],
-    live: "https://devlogs.42web.io",
+    live: "https://devlogs-zobdhillon.up.railway.app/",
     github: "https://github.com/zobdhillon/devlogs",
-    illustration: devActivityImg,
     useFrame: false,
     devices: {
-      laptop: { url: "https://devlogs.42web.io", w: 1440, h: 900 },
-      phone: { url: "https://devlogs.42web.io", w: 390, h: 844 },
+      laptop: {
+        url: "https://devlogs-zobdhillon.up.railway.app/#demo",
+        w: 1440,
+        h: 900,
+      },
+      phone: {
+        url: "https://devlogs-zobdhillon.up.railway.app/",
+        w: 390,
+        h: 844,
+      },
     },
     flip: true,
   },
@@ -71,8 +78,7 @@ const projects = [
       </>,
     ],
     live: "https://sabach.netlify.app/",
-    github: null,
-    illustration: chatBotImg,
+    github: "https://github.com/zobdhillon/SabaCh",
     useFrame: false,
     devices: {
       laptop: { url: "https://sabach.netlify.app/", w: 1440, h: 900 },
@@ -80,98 +86,346 @@ const projects = [
     },
     flip: false,
   },
+  {
+    num: "03",
+    title: "Resume",
+    tags: ["JavaScript", "JSON", "Railway"],
+    paragraphs: [
+      <>
+        <em>Resume</em> — a dynamic resume generator that renders your entire
+        resume from a single <em>JSON data file</em>, keeping content and
+        presentation cleanly separated.
+      </>,
+      <>
+        Update your experience, skills, or education by editing{" "}
+        <em>one JSON file</em> — no touching markup or styling to keep your
+        resume current.
+      </>,
+    ],
+    live: "https://zob-resume.up.railway.app/",
+    github: "https://github.com/zobdhillon/Resume",
+    useFrame: false,
+    devices: {
+      laptop: { url: "https://zob-resume.up.railway.app/", w: 1440, h: 900 },
+      phone: { url: "https://zob-resume.up.railway.app/print", w: 390, h: 844 },
+    },
+    flip: true,
+  },
 ];
 
-// ── Sharp scaled iframe ───────────────────────────────────────────────────
-function DeviceFrame({ kind, url, w, h, extraStyle = {} }) {
+// ── Scaled iframe screen (shared by every device chrome) ──────────────────
+function DeviceScreen({ url, w, h, kind, screenRadius }) {
   const outerRef = useRef(null);
-  const [scale, setScale] = useState(1);
+  const [zoom, setZoom] = useState(1);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const el = outerRef.current;
     if (!el) return;
-    const apply = () => setScale(el.getBoundingClientRect().width / w);
-    apply();
-    const ro = new ResizeObserver(apply);
+
+    const resize = () => {
+      setZoom(el.clientWidth / w);
+    };
+
+    resize();
+
+    const ro = new ResizeObserver(resize);
     ro.observe(el);
+
     return () => ro.disconnect();
   }, [w]);
-
-  const radius =
-    kind === "phone" ? "28px" : kind === "tablet" ? "16px" : "10px";
-  const pad = kind === "phone" ? "5px" : "4px";
 
   return (
     <div
       ref={outerRef}
       style={{
         width: "100%",
-        aspectRatio: `${w} / ${h}`,
-        background: "#1c1c1c",
-        borderRadius: radius,
-        padding: pad,
-        boxSizing: "border-box",
-        boxShadow: "0 24px 64px rgba(0,0,0,0.6)",
-        ...extraStyle,
+        aspectRatio: `${w}/${h}`,
+        overflow: "hidden",
+        borderRadius: screenRadius,
+        background: "#000",
       }}
     >
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: `calc(${radius} - 3px)`,
-          overflow: "hidden",
-          position: "relative",
-          background: "#fff",
-        }}
-      >
-        {!loaded && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "linear-gradient(90deg,#1a1a1a 25%,#252525 50%,#1a1a1a 75%)",
-              backgroundSize: "200% 100%",
-              animation: "shimmer 1.4s infinite",
-            }}
-          />
-        )}
+      {!loaded && (
         <div
           style={{
-            width: w,
-            height: h,
-            transform: `scale(${scale})`,
-            transformOrigin: "top left",
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(90deg,#1a1a1a 25%,#252525 50%,#1a1a1a 75%)",
+            backgroundSize: "200% 100%",
+            animation: "shimmer 1.4s infinite",
           }}
-        >
-          <iframe
-            src={url}
-            title={`${kind}-preview`}
-            loading="lazy"
-            scrolling="no"
-            onLoad={() => setLoaded(true)}
-            style={{
-              width: w,
-              height: h,
-              border: "none",
-              pointerEvents: "none",
-              display: "block",
-            }}
-          />
-        </div>
-      </div>
+        />
+      )}
+
+      <iframe
+        src={url}
+        title={`${kind}-preview`}
+        loading="lazy"
+        scrolling="no"
+        onLoad={() => setLoaded(true)}
+        style={{
+          width: `${w}px`,
+          height: `${h}px`,
+          border: "none",
+          display: "block",
+          zoom,
+          transformOrigin: "top left",
+          pointerEvents: "none",
+        }}
+      />
     </div>
   );
 }
 
+// ── Device chrome — laptop hinge/base, tablet camera bezel, phone notch ───
+function DeviceFrame({ kind, url, w, h }) {
+  const screen = (
+    <DeviceScreen
+      url={url}
+      w={w}
+      h={h}
+      kind={kind}
+      screenRadius={
+        kind === "laptop"
+          ? "6px 6px 2px 2px"
+          : kind === "tablet"
+            ? "10px"
+            : "16px"
+      }
+    />
+  );
+
+  if (kind === "laptop") {
+    return (
+      <div className="device-shell" style={{ width: "100%" }}>
+        <div
+          className="device-glass"
+          style={{
+            position: "relative",
+            background: "linear-gradient(180deg,#2b2b2b,#161616)",
+            borderRadius: "14px 14px 5px 5px",
+            padding: "8px 8px 6px",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "1.1%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              background: "#000",
+              boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.18)",
+            }}
+          />
+          {screen}
+        </div>
+        {/* keyboard base / hinge */}
+        <div
+          className="device-base"
+          style={{
+            position: "relative",
+            height: "16px",
+            margin: "0 -3.5%",
+            background: "linear-gradient(180deg,#2f2f2f,#111 60%)",
+            borderRadius: "0 0 9px 9px",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "14%",
+              height: "5px",
+              background: "#0a0a0a",
+              borderRadius: "0 0 7px 7px",
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "tablet") {
+    return (
+      <div
+        className="device-standalone"
+        style={{
+          position: "relative",
+          background: "linear-gradient(160deg,#2b2b2b,#141414)",
+          borderRadius: "20px",
+          padding: "8px",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: "1.4%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "5px",
+            height: "5px",
+            borderRadius: "50%",
+            background: "#000",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.15)",
+          }}
+        />
+        {screen}
+      </div>
+    );
+  }
+
+  // phone
+  return (
+    <div
+      className="device-standalone"
+      style={{
+        position: "relative",
+        background: "linear-gradient(160deg,#2b2b2b,#141414)",
+        borderRadius: "20px",
+        padding: "6px",
+        boxSizing: "border-box",
+      }}
+    >
+      <div />
+      {screen}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "5px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "26%",
+          height: "3px",
+          background: "rgba(255,255,255,0.45)",
+          borderRadius: "10px",
+          zIndex: 2,
+        }}
+      />
+    </div>
+  );
+}
+
+// ── Shared device-chrome hover/shadow styles ───────────────────────────────
+const DEVICE_HOVER_CSS = `
+  @keyframes shimmer {
+    0%   { background-position:  200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Laptop: wrapper handles the lift, screen + base each carry their own shadow */
+  .device-shell { transition: transform .35s ease; cursor: pointer; }
+  .device-shell:hover { transform: translateY(-8px); }
+  .device-glass {
+    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+    transition: box-shadow .35s ease;
+  }
+  .device-shell:hover .device-glass {
+    box-shadow: 0 22px 42px rgba(0,0,0,0.5);
+  }
+  .device-base {
+    box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+    transition: box-shadow .35s ease;
+  }
+  .device-shell:hover .device-base {
+    box-shadow: 0 12px 20px rgba(0,0,0,0.4);
+  }
+
+  /* Tablet / phone: single element carries both lift + shadow */
+  .device-standalone {
+    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+    transition: transform .35s ease, box-shadow .35s ease;
+    cursor: pointer;
+  }
+  .device-standalone:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 38px rgba(0,0,0,0.45);
+  }
+`;
+
 // ── Visual column — iframes + live button ─────────────────────────────────
 function VisualCol({ devices, live }) {
+  const hasLaptop = !!devices?.laptop;
+  const hasTablet = !!devices?.tablet;
   const hasPhone = !!devices?.phone;
   const primary = devices?.laptop || devices?.tablet;
   const primaryKind = devices?.laptop ? "laptop" : "tablet";
 
+  if (hasLaptop && hasTablet && hasPhone) {
+    return (
+      <div className="reveal" style={{ position: "relative", width: "100%" }}>
+        <div style={{ position: "relative", width: "58%" }}>
+          <DeviceFrame
+            kind="laptop"
+            url={devices.laptop.url}
+            w={devices.laptop.w}
+            h={devices.laptop.h}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            top: "14%",
+            right: "7%",
+            width: "34%",
+            zIndex: 1,
+          }}
+        >
+          <DeviceFrame
+            kind="tablet"
+            url={devices.tablet.url}
+            w={devices.tablet.w}
+            h={devices.tablet.h}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            bottom: "5%",
+            left: "5%",
+            width: "20%",
+            zIndex: 3,
+          }}
+        >
+          <DeviceFrame
+            kind="phone"
+            url={devices.phone.url}
+            w={devices.phone.w}
+            h={devices.phone.h}
+          />
+        </div>
+
+        {live && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "12%",
+              left: "37%",
+              zIndex: 5,
+            }}
+          >
+            <CircleIconButton leftIcon={Globe} href={live} label="View live" />
+          </div>
+        )}
+
+        <div style={{ paddingBottom: "22%" }} />
+
+        <style>{DEVICE_HOVER_CSS}</style>
+      </div>
+    );
+  }
+
+  // ── Two-device (laptop + phone) or single-device layout ──────────────────
   return (
     <div className="reveal" style={{ position: "relative", width: "100%" }}>
       {/* Primary device */}
@@ -190,7 +444,7 @@ function VisualCol({ devices, live }) {
           <div
             style={{
               position: "absolute",
-              bottom: "-22px",
+              bottom: "-20px",
               left: "50%",
               transform: "translateX(-50%)",
               zIndex: 4,
@@ -206,7 +460,7 @@ function VisualCol({ devices, live }) {
         <div
           style={{
             position: "absolute",
-            bottom: "-8%",
+            bottom: "-15%",
             right: "0",
             width: "32%",
             zIndex: 2,
@@ -223,23 +477,17 @@ function VisualCol({ devices, live }) {
 
       <div style={{ paddingBottom: hasPhone ? "14%" : "0" }} />
 
-      <style>{`
-        @keyframes shimmer {
-          0%   { background-position:  200% 0; }
-          100% { background-position: -200% 0; }
-        }
-      `}</style>
+      <style>{DEVICE_HOVER_CSS}</style>
     </div>
   );
 }
 
-// ── Static frame visual (for Rehearse) ───────────────────────────────────
 function StaticVisual({ src, live }) {
   return (
     <div className="reveal" style={{ position: "relative", width: "100%" }}>
       <img
         src={src}
-        alt="Rehearse app preview"
+        alt="Project preview"
         style={{
           width: "100%",
           display: "block",
@@ -269,31 +517,14 @@ function StaticVisual({ src, live }) {
 
 // ── Text column ───────────────────────────────────────────────────────────
 function TextCol({ project }) {
-  const { num, title, tags, paragraphs, github, illustration, flip } = project;
-  const circSide = flip ? "right" : "left";
+  const { num, title, tags, paragraphs, github } = project;
 
   return (
     <div
       className="reveal flex flex-col justify-center py-8 lg:py-0"
       style={{ position: "relative" }}
     >
-      {/* SideCircle — always on text column side, half visible */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          [circSide]: 0,
-          transform: `translateY(-50%) ${circSide === "right" ? "translateX(50%)" : "translateX(-50%)"}`,
-          width: "clamp(220px, 38vw, 520px)",
-          height: "clamp(220px, 38vw, 520px)",
-          borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.06)",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-
-      <div style={{ position: "relative", zIndex: 2 }}>
+      <div style={{ position: "relative" }}>
         {/* Number */}
         <span
           style={{
@@ -309,37 +540,20 @@ function TextCol({ project }) {
           {num} /
         </span>
 
-        {/* Title row — heading + illustration side by side */}
-        <div className="flex items-center gap-4 mb-5">
-          <h2
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 700,
-              fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
-              color: "white",
-              letterSpacing: "-0.01em",
-              lineHeight: 1.1,
-              margin: 0,
-            }}
-          >
-            {title}
-          </h2>
-
-          {illustration && (
-            <img
-              src={illustration}
-              alt=""
-              aria-hidden
-              style={{
-                width: "clamp(48px, 7vw, 72px)",
-                objectFit: "contain",
-                opacity: 1,
-                flexShrink: 0,
-                filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.4))",
-              }}
-            />
-          )}
-        </div>
+        {/* Title */}
+        <h2
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 700,
+            fontSize: "clamp(1.5rem, 4vw, 2.6rem)",
+            color: "white",
+            letterSpacing: "-0.01em",
+            lineHeight: 1.1,
+            margin: "0 0 20px",
+          }}
+        >
+          {title}
+        </h2>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-8">
@@ -349,11 +563,12 @@ function TextCol({ project }) {
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 400,
-                fontSize: "13px",
+                fontSize: "clamp(11px, 1.1vw, 13px)",
                 color: "rgba(255,255,255,0.65)",
                 border: "1px solid rgba(255,255,255,0.13)",
                 padding: "5px 14px",
                 borderRadius: "999px",
+                whiteSpace: "nowrap",
               }}
             >
               {tag}
@@ -368,10 +583,10 @@ function TextCol({ project }) {
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontWeight: 300,
-              fontSize: "clamp(13px, 1.3vw, 15px)",
+              fontSize: "clamp(13px, 1.6vw, 15px)",
               color: "rgba(255,255,255,0.42)",
               lineHeight: 1.8,
-              maxWidth: "400px",
+              maxWidth: "480px",
               marginBottom: i < paragraphs.length - 1 ? "14px" : "32px",
             }}
           >
@@ -393,23 +608,28 @@ function TextCol({ project }) {
 }
 
 // ── Project block ─────────────────────────────────────────────────────────
-function ProjectBlock({ project, index }) {
+function ProjectBlock({ project }) {
   const { flip, useFrame, devices, live } = project;
 
   const visualEl = useFrame ? (
-    <StaticVisual src={rehearseFrameImg} live={live} />
+    <StaticVisual src={project.staticSrc} live={live} />
   ) : (
     <VisualCol devices={devices} live={live} />
   );
 
+  const showDecor = project.num === "00" || project.num === "03";
+  const decorSide = flip ? "left" : "right";
+
+  // Below "lg", text always comes first regardless of flip.
+  // At "lg" and up, flip decides the left/right order.
   const visualCol = (
-    <div className={flip ? "order-2 lg:order-1" : "order-1 lg:order-2"}>
+    <div className={`order-2 ${flip ? "lg:order-1" : "lg:order-2"}`}>
       <div className="reveal">{visualEl}</div>
     </div>
   );
 
   const textCol = (
-    <div className={flip ? "order-1 lg:order-2" : "order-2 lg:order-1"}>
+    <div className={`order-1 ${flip ? "lg:order-2" : "lg:order-1"}`}>
       <TextCol project={project} />
     </div>
   );
@@ -417,12 +637,25 @@ function ProjectBlock({ project, index }) {
   return (
     <div
       style={{
+        position: "relative",
+        zIndex: 0,
         paddingTop: "clamp(60px, 8vw, 110px)",
         paddingBottom: "clamp(60px, 8vw, 110px)",
-        borderTop: index === 0 ? "none" : "1px solid rgba(255,255,255,0.05)",
       }}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      {showDecor && (
+        <SideCircle
+          side={decorSide}
+          align="center"
+          size="clamp(280px, 34vw, 460px)"
+          showAmount={45}
+        />
+      )}
+
+      <div
+        className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] lg:grid-cols-2 gap-10 md:gap-10 lg:gap-20 items-center"
+        style={{ position: "relative", zIndex: 1 }}
+      >
         {flip ? (
           <>
             {visualCol}
@@ -449,14 +682,17 @@ export default function Projects() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("show");
-            observer.unobserve(entry.target);
+          } else {
+            entry.target.classList.remove("show");
           }
         });
       },
       { threshold: 0.08 },
     );
+
     const reveals = ref.current?.querySelectorAll(".reveal");
     reveals?.forEach((el) => observer.observe(el));
+
     return () => observer.disconnect();
   }, []);
 
@@ -468,11 +704,16 @@ export default function Projects() {
         background: "#090909",
         position: "relative",
         overflow: "hidden",
+        zIndex: 0,
       }}
     >
       <div
         className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8"
-        style={{ paddingTop: "clamp(80px, 10vw, 140px)" }}
+        style={{
+          paddingTop: "clamp(80px, 10vw, 140px)",
+          position: "relative",
+          zIndex: 1,
+        }}
       >
         {/* Heading */}
         <div className="reveal text-center mb-16">
@@ -493,10 +734,7 @@ export default function Projects() {
         ))}
 
         {/* Footer */}
-        <div
-          className="reveal py-16"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
-        >
+        <div className="reveal py-16">
           <span
             style={{
               fontFamily: "'JetBrains Mono', monospace",

@@ -13,8 +13,8 @@ const projects = [
     description:
       "AI-powered interview practice platform with real-time feedback, scoring, and session tracking.",
     tags: ["Laravel", "PHP", "MySQL", "Groq API"],
-    live: "https://devlogs.42web.io",
-    github: null,
+    live: "https://rehearse-ai.up.railway.app",
+    github: "https://github.com/zobdhillon/Rehearse",
     image: rehearseImg,
   },
   {
@@ -23,18 +23,28 @@ const projects = [
     description:
       "A full stack developer social platform. Create posts, track learning progress and interact with other developers.",
     tags: ["Laravel", "PHP", "MySQL", "Tailwind"],
-    live: "https://devlogs.42web.io",
+    live: "https://devlogs-zobdhillon.up.railway.app/",
     github: "https://github.com/zobdhillon/devlogs",
     image: devlogsImg,
   },
   {
     num: "02",
-    title: "Saba — Copywriter Portfolio",
+    title: "Resume",
     description:
-      "A portfolio site designed and built for a professional copywriter. Clean layout, responsive design, real client project.",
-    tags: ["HTML", "CSS", "JavaScript"],
+      "A dynamic resume generator that renders your entire resume from a single JSON data file, keeping content and presentation cleanly separated",
+    tags: ["HTML", "Tailwind", "Laravel"],
     live: "https://sabach.netlify.app/",
-    github: null,
+    github: "https://github.com/zobdhillon/SabaCh",
+    image: resumeImg,
+  },
+  {
+    num: "03",
+    title: "Resume",
+    description:
+      "Dynamic resume generator that renders your entire resume from a single JSON data file, keeping content and presentation cleanly separated.",
+    tags: ["JavaScript", "JSON", "Railway"],
+    live: "https://zob-resume.up.railway.app/",
+    github: "https://github.com/zobdhillon/Resume",
     image: resumeImg,
   },
 ];
@@ -98,14 +108,22 @@ function ProjectCarousel() {
   const [active, setActive] = useState(0);
   const count = projects.length;
 
+  // Keep containerWidth in sync with the carousel's actual rendered width so
+  // the responsive card sizing below reacts correctly (this uses the
+  // existing containerRef, no new refs introduced).
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const update = () => setContainerWidth(el.clientWidth);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(el);
-    return () => observer.disconnect();
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+
+    resizeObserver.observe(el);
+
+    return () => resizeObserver.disconnect();
   }, []);
 
   const isMobile = containerWidth < 560;
@@ -137,7 +155,9 @@ function ProjectCarousel() {
           const isCenter = offset === 0;
           const isVisible = Math.abs(offset) <= 1;
           const scale = isCenter ? 1 : 0.86;
-          const opacity = isCenter ? 1 : isVisible ? 0.4 : 0;
+          // Dim via an internal overlay instead of element opacity, so the
+          // card stays fully opaque and blocks SideCircle behind it.
+          const dimAmount = isCenter ? 0 : isVisible ? 0.65 : 1; // 1 = fully hidden
           const translateX = offset * peek;
 
           return (
@@ -147,10 +167,19 @@ function ProjectCarousel() {
               style={{
                 width: cardWidth,
                 height: cardHeight,
-                transform: `translateX(${translateX}px) scale(${scale})`,
-                opacity,
+                // translateZ(0) forces this card onto its own GPU compositing
+                // layer, so the browser scales/animates it with the GPU's
+                // sub-pixel-accurate transform instead of re-rasterizing at
+                // low-precision CPU-scaled coordinates on every frame — this
+                // is what keeps the image crisp during the scale/slide
+                // transition instead of it going soft mid-animation.
+                transform: `translateX(${translateX}px) translateZ(0) scale(${scale})`,
+                opacity: isVisible ? 1 : 0,
                 zIndex: isCenter ? 20 : 10,
                 pointerEvents: isCenter ? "auto" : "none",
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                willChange: "transform",
               }}
             >
               <div
@@ -161,7 +190,6 @@ function ProjectCarousel() {
                   border: "1px solid rgba(255,255,255,0.13)",
                 }}
               >
-
                 {/* Terminal body — always visible underneath, z-index 1 */}
                 <div
                   className="p-4"
@@ -178,16 +206,39 @@ function ProjectCarousel() {
                       top: 0,
                       left: 0,
                       filter: "grayscale(100%)",
+                      // Explicit "auto" keeps the browser's default
+                      // high-quality resampling — some browsers fall back to
+                      // a cheaper/blurrier algorithm on transformed images
+                      // unless this is stated explicitly.
+                      imageRendering: "auto",
+                      // Own compositing layer for the image too, so it isn't
+                      // re-rasterized as part of its ancestor's transform.
+                      transform: "translateZ(0)",
+                      backfaceVisibility: "hidden",
                     }}
                   />
                 </div>
+
+                {/* Dim overlay — replaces element opacity so side cards stay
+                    solid (blocking SideCircle) while still reading as faded */}
+                {dimAmount > 0 && (
+                  <div
+                    className="absolute inset-0 transition-opacity duration-500 ease-out"
+                    style={{
+                      background: "#090909",
+                      opacity: dimAmount,
+                      zIndex: 4,
+                      pointerEvents: "none",
+                      borderRadius: "12px",
+                    }}
+                  />
+                )}
 
                 <div
                   className="absolute top-0 right-0 h-full transition-transform duration-500 ease-out flex flex-col justify-between p-4"
                   style={{
                     width: isMobile ? "75%" : "65%",
-                    background: "rgba(16, 16, 16, 0.79)",
-
+                    background: "rgba(10, 10, 10, 0.95)",
                     borderLeft: "1px solid rgba(255,255,255,0.06)",
                     zIndex: 3,
                     transform: isCenter ? undefined : "translateX(100%)",
@@ -299,15 +350,31 @@ function ProjectCarousel() {
 export default function Home() {
   const heroRef = useRef(null);
 
+  // Reveal-on-scroll: every .reveal element inside heroRef fades up when it
+  // enters the viewport and hides again when it leaves, so the animation
+  // replays every time the user scrolls past it (not just on first mount).
   useEffect(() => {
     const els = heroRef.current?.querySelectorAll(".reveal");
-    if (!els) return;
-    const timeouts = [];
-    els.forEach((el, i) => {
-      const t = setTimeout(() => el.classList.add("show"), 100 + i * 120);
-      timeouts.push(t);
-    });
-    return () => timeouts.forEach(clearTimeout);
+    if (!els || els.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      },
+    );
+
+    els.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollToProjects = () =>
@@ -462,22 +529,24 @@ export default function Home() {
               style={{
                 borderRadius: "999px",
                 border: "1px solid rgba(255,255,255,0.12)",
-                background: "rgba(255,255,255,0.03)",
+                background: "rgba(15,15,15,0.92)",
                 color: "rgba(255,255,255,0.6)",
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "11px",
                 letterSpacing: "0.05em",
+                position: "relative",
+                zIndex: 1,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.border = "1px solid rgba(45,212,191,0.4)";
                 e.currentTarget.style.color = "rgba(255,255,255,0.9)";
-                e.currentTarget.style.background = "rgba(45,212,191,0.04)";
+                e.currentTarget.style.background = "rgba(20,30,29,0.92)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.border =
                   "1px solid rgba(255,255,255,0.12)";
                 e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+                e.currentTarget.style.background = "rgba(15,15,15,0.92)";
               }}
             >
               <Icon size={13} strokeWidth={1.8} />
@@ -496,10 +565,12 @@ export default function Home() {
             style={{
               borderRadius: "999px",
               border: "1px solid rgba(45,212,191,0.2)",
-              background: "rgba(45,212,191,0.04)",
+              background: "rgba(15,25,24,0.92)",
               color: "#2DD4BF",
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: "11px",
+              position: "relative",
+              zIndex: 1,
             }}
           >
             <span className="relative flex h-2 w-2">
