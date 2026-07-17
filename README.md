@@ -1,37 +1,43 @@
-# 👋 Hi, I'm Zobia
+# Zobia Akbar – Portfolio
 
-This is my personal portfolio website.
+This repository contains the source code for my personal portfolio website.
 
-I’m a full-stack developer who enjoys building clean, useful, and meaningful web applications. I like turning ideas into real projects and continuously improving my skills through hands-on development.
-
----
-
-## 🌱 About This Project
-
-This portfolio represents my journey as a developer. It’s a place where I showcase my work, experiment with ideas, and express what I’m learning and building.
+I am a Full-Stack Developer focused on building modern, scalable, and user-centered web applications. This portfolio showcases my projects, technical skills, and experience through carefully designed and responsive interfaces.
 
 ---
 
-## 🚀 What I Focus On
+## About
 
-- Building real-world web applications  
-- Learning and improving every day  
-- Creating clean and user-friendly interfaces  
-- Turning ideas into working products  
+This portfolio was designed and developed to present my work, demonstrate my technical abilities, and serve as a central place to explore the projects I have built.
 
 ---
 
-## 🌐 Live Website
+## Technologies
 
-[Visit My Portfolio](https://zobdhillon.netlify.app/)
-
----
-
-## 📫 Connect With Me
-
-- GitHub: https://github.com/zobdhillon  
-- Portfolio: https://devlogs.42web.io  
+- React
+- JavaScript
+- Tailwind CSS
+- HTML5
+- CSS3
 
 ---
 
-⭐ Always learning, always building.
+## Features
+
+- Responsive design
+- Smooth scrolling and animations
+- Interactive project showcase
+- Skills overview
+- Contact section
+
+---
+
+## Live Website
+
+https://zobdhillon.netlify.app/
+
+---
+
+## Contact
+
+Email: zobbdhillon@gmail.com
