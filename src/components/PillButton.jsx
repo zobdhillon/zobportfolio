@@ -1,7 +1,6 @@
 export default function PillButton({ label, onClick, href, target }) {
   const content = (
     <>
-      {/* White pill — responsive padding/font */}
       <span
         className="flex items-center transition-all duration-300"
         style={{
@@ -21,7 +20,6 @@ export default function PillButton({ label, onClick, href, target }) {
         {label}
       </span>
 
-      {/* Arrow circle — moves away from pill on hover, scales up slightly */}
       <span
         className="
           flex items-center justify-center flex-shrink-0

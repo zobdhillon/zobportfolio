@@ -10,7 +10,7 @@ const TMP = path.join(ROOT, "scripts", ".tmp-mockups");
 const OUT = path.join(ROOT, "public", "images", "projects");
 
 const CANVAS_W = 3200;
-const CANVAS_H = 2000; // 16:10
+const CANVAS_H = 2000;
 
 const projects = [
   {
@@ -154,7 +154,6 @@ function compositionHtml(project, shotsBase64) {
     border-radius: inherit;
   }
 
-  /* Laptop — largest, back layer */
   .laptop {
     left: 80px;
     top: 120px;
@@ -190,7 +189,6 @@ function compositionHtml(project, shotsBase64) {
     background: #050505;
   }
 
-  /* Tablet — mid layer, behind-right */
   .tablet {
     left: 1280px;
     top: 520px;
@@ -207,7 +205,6 @@ function compositionHtml(project, shotsBase64) {
     aspect-ratio: 1024 / 768;
   }
 
-  /* Phone — frontmost, bottom-right */
   .phone {
     left: 1980px;
     top: 820px;
@@ -236,7 +233,6 @@ function compositionHtml(project, shotsBase64) {
     box-shadow: 0 1px 2px rgba(0,0,0,0.6);
   }
 
-  /* Ambient occlusion between overlapping devices */
   .tablet .shell::after,
   .phone .shell::after {
     content: "";

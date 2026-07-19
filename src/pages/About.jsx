@@ -4,7 +4,6 @@ import SkillCard from "../components/SkillCard";
 import profilePic from "../assets/profile-pic.png";
 import useReveal from "../hooks/useReveal";
 
-// ── Skill card data ────────────────────────────────────────────────────────────
 const frontEnd = {
   title: "Front-end",
   techs: [
@@ -58,7 +57,10 @@ function GithubFilled({ size = 16, color = "rgba(255,255,255,0.9)" }) {
   );
 }
 
-// ── Main component ─────────────────────────────────────────────────────────────
+function Emphasis({ children }) {
+  return <em style={{ fontStyle: "italic", color: "#f0f5f4" }}>{children}</em>;
+}
+
 export default function About() {
   const sectionRef = useReveal({
     threshold: 0.25,
@@ -79,11 +81,6 @@ export default function About() {
         overflow: "hidden",
       }}
     >
-      {/* Decorative corner arc — mirrors navbar quarter-circle language.
-          Section above has position: relative + zIndex: 0, which forms its
-          own stacking context — that's what makes SideCircle's internal
-          zIndex: -1 land just above this section's own background, and
-          still behind every other element inside the section. */}
       <SideCircle
         side="left"
         align="top"
@@ -109,7 +106,6 @@ export default function About() {
             marginBottom: "56px",
           }}
         >
-          {/* Breadcrumb */}
           <p
             style={{
               fontFamily: "'JetBrains Mono', monospace",
@@ -122,7 +118,6 @@ export default function About() {
             ... /About me ...
           </p>
 
-          {/* Intro text */}
           <p
             style={{
               fontFamily: "'JetBrains Mono', monospace",
@@ -132,22 +127,15 @@ export default function About() {
             }}
           >
             Hello! I&apos;m Zobia, I&apos;m a{" "}
-            <em style={{ fontStyle: "italic", color: "#f0f5f4" }}>
-              full-stack developer
-            </em>
-            .<br />
+            <Emphasis>full-stack developer</Emphasis>.
+            <br />
             Building thoughtful web experiences,{" "}
-            <em style={{ fontStyle: "italic", color: "#f0f5f4" }}>
-              one layer at a time
-            </em>
-            .
+            <Emphasis>one layer at a time</Emphasis>.
           </p>
 
-          {/* Spacer */}
           <div />
         </div>
 
-        {/* ── Body: cards + portrait ───────────────────────────────────────── */}
         <div
           style={{
             display: "grid",
@@ -156,12 +144,10 @@ export default function About() {
             alignItems: "start",
           }}
         >
-          {/* LEFT — skill cards */}
           <div
             className="reveal"
             style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
-            {/* Front-end */}
             <SkillCard
               {...frontEnd}
               className="skill-card-wide"
@@ -174,7 +160,6 @@ export default function About() {
               techStyle={{ color: "rgba(0, 0, 0, 0.85)" }}
             />
 
-            {/* Styles row + arrow button */}
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <SkillCard
                 {...styles}
@@ -182,7 +167,6 @@ export default function About() {
                 style={{ width: "300px" }}
               />
 
-              {/* Circular arrow button */}
               <CircleIconButton
                 leftIcon={GithubFilled}
                 href="https://github.com/zobdhillon"
@@ -190,14 +174,12 @@ export default function About() {
               />
             </div>
 
-            {/* Back-end */}
             <SkillCard
               {...backEnd}
               className="skill-card-wide"
               style={{ maxWidth: "520px" }}
             />
 
-            {/* Caption + DevOps */}
             <div
               className="about-caption-row"
               style={{
@@ -218,9 +200,7 @@ export default function About() {
                 }}
               >
                 Some of my{" "}
-                <em style={{ color: "#f0f5f4" }}>
-                  favorite technologies, topics, or tools
-                </em>{" "}
+                <Emphasis>favorite technologies, topics, or tools</Emphasis>{" "}
                 that I worked with
               </p>
               <SkillCard
@@ -231,7 +211,6 @@ export default function About() {
             </div>
           </div>
 
-          {/* RIGHT — portrait */}
           <div
             className="reveal"
             style={{ display: "flex", justifyContent: "flex-end" }}
@@ -260,9 +239,7 @@ export default function About() {
         </div>
       </div>
 
-      {/* ── Responsive overrides ─────────────────────────────────────────── */}
       <style>{`
-                /* Reveal animation — same pattern as Home.jsx */
         .reveal {
           opacity: 0;
           transform: translateY(40px);
@@ -285,7 +262,6 @@ export default function About() {
           height: 440px;
         }
 
-        /* Tablet */
         @media (max-width: 1024px) {
           #about > div {
             padding: 32px 24px 0 !important;
@@ -310,24 +286,20 @@ export default function About() {
           }
         }
 
-        /* Mobile */
         @media (max-width: 767px) {
           #about > div {
             padding: 24px 20px 0 !important;
           }
 
-          /* Top row: stack vertically */
           #about .reveal:first-child {
             grid-template-columns: 1fr !important;
           }
 
-          /* Body grid: single column */
           #about > div > div:last-child {
             grid-template-columns: 1fr !important;
             gap: 32px !important;
           }
 
-          /* Cards: full width */
           .skill-card-wide,
           .skill-card-styles,
           .skill-card-devops {
@@ -335,13 +307,11 @@ export default function About() {
             width: 100% !important;
           }
 
-          /* Caption + DevOps: stack */
           .about-caption-row {
             flex-direction: column !important;
             align-items: flex-start !important;
           }
 
-          /* Portrait: centered, scales with width */
           #about > div > div:last-child > div:last-child {
             justify-content: center !important;
           }

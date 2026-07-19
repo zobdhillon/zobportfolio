@@ -44,7 +44,6 @@ export default function Navbar() {
       style={{ background: "rgba(9,9,9,0.85)", backdropFilter: "blur(12px)" }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo — left */}
         <button
           type="button"
           className="cursor-pointer flex-shrink-0 leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
@@ -66,7 +65,6 @@ export default function Navbar() {
           </div>
         </button>
 
-        {/* Desktop links — absolutely centered */}
         <ul className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
           {links.map((link) => {
             const isActive = activeSection === link.id;
@@ -98,7 +96,6 @@ export default function Navbar() {
           })}
         </ul>
 
-        {/* Right side — availability status with circle always wrapping it */}
         <div
           className="hidden md:flex items-center gap-2 flex-shrink-0"
           style={{
@@ -116,7 +113,6 @@ export default function Navbar() {
           <span>Available</span>
         </div>
 
-        {/* Hamburger — mobile only */}
         <button
           type="button"
           className="md:hidden flex flex-col gap-1.5 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
@@ -149,7 +145,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <div
           id="mobile-menu"

@@ -1,14 +1,16 @@
-import { Github, Linkedin, Mail, Send } from "lucide-react";
+import { Linkedin, Mail } from "lucide-react";
 import SectionLabel from "../components/SectionLabel";
 import SideCircle from "../components/SideCircle";
 import SocialPill from "../components/SocialPill";
 import useReveal from "../hooks/useReveal";
 
 const socials = [
-  { label: "GitHub", href: "https://github.com/zobdhillon", icon: Github },
-  { label: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/zobia-dhillon-23a712230",
+    icon: Linkedin,
+  },
   { label: "E-mail", href: "mailto:zobbdhillon@gmail.com", icon: Mail },
-  { label: "Telegram", href: "https://t.me/zobdhillon", icon: Send },
 ];
 
 const navLinks = [
@@ -26,6 +28,83 @@ const scrollTo = (id) => {
     behavior: prefersReducedMotion ? "auto" : "smooth",
   });
 };
+
+// ── Shared bits (previously duplicated between desktop/mobile) ─────────────
+
+function ContactLabel({ fontSize }) {
+  return (
+    <SectionLabel style={{ fontSize, color: "rgba(255,255,255,0.7)" }}>
+      ... /Contacts ...
+    </SectionLabel>
+  );
+}
+
+function NavLinks({ gap = "gap-6", fontSize = "15px", withHover = false }) {
+  return (
+    <div className={`flex items-center ${gap} flex-wrap`}>
+      {navLinks.map((link) => (
+        <button
+          key={link.id}
+          type="button"
+          onClick={() => scrollTo(link.id)}
+          aria-label={`Go to ${link.label} section`}
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 400,
+            fontSize,
+            color: "rgba(255,255,255,0.45)",
+            padding: 0,
+            transition: withHover ? "color 0.2s" : undefined,
+          }}
+          onMouseEnter={
+            withHover
+              ? (e) => (e.currentTarget.style.color = "white")
+              : undefined
+          }
+          onMouseLeave={
+            withHover
+              ? (e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")
+              : undefined
+          }
+        >
+          {link.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SocialsGrid() {
+  return (
+    <div className="reveal grid grid-cols-2 gap-2">
+      {socials.map((s) => (
+        <SocialPill key={s.label} {...s} />
+      ))}
+    </div>
+  );
+}
+
+function Footer({ fontSize = "11px" }) {
+  const textStyle = {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize,
+    color: "rgba(255,255,255,0.15)",
+    letterSpacing: "0.1em",
+  };
+  return (
+    <div
+      className="reveal flex items-center justify-between pt-4"
+      style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+    >
+      <span style={textStyle}>© 2025 Zob Dhillon</span>
+      <span style={textStyle}>// I was my own client.</span>
+    </div>
+  );
+}
 
 // ── Code block (developer.js) ─────────────────────────────────────────────
 function CodeBlock() {
@@ -243,139 +322,45 @@ export default function Contact() {
                 style={{
                   fontFamily: "'DM Sans', sans-serif",
                   fontWeight: 300,
-                  fontSize: "15px",
+                  fontSize: "20px",
                   color: "rgba(255,255,255,0.4)",
                   lineHeight: 1.5,
                   maxWidth: "160px",
                 }}
               >
-                Full-stack
+                Full-Stack
                 <br />
-                developer
+                Developer
               </p>
             </div>
 
             {/* Social pills — desktop 2 column grid */}
-            <div
-              className="reveal grid grid-cols-2 gap-2"
-              style={{ position: "relative", marginTop: "48px", zIndex: 1 }}
-            >
-              {socials.map((s) => (
-                <SocialPill key={s.label} {...s} />
-              ))}
+            <div style={{ position: "relative", marginTop: "48px", zIndex: 1 }}>
+              <SocialsGrid />
             </div>
           </div>
 
           {/* Right — heading + nav links + code block */}
           <div className="reveal flex flex-col gap-6">
-            {/* ... /Contacts ... */}
-            <SectionLabel
-              style={{
-                fontSize: "clamp(13px, 1.5vw, 18px)",
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              ... /Contacts ...
-            </SectionLabel>
+            <ContactLabel fontSize="clamp(13px, 1.5vw, 18px)" />
 
-            {/* Nav links */}
-            <div className="flex items-center gap-6 flex-wrap">
-              {navLinks.map((link) => (
-                <button
-                  key={link.id}
-                  type="button"
-                  onClick={() => scrollTo(link.id)}
-                  aria-label={`Go to ${link.label} section`}
-                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: 400,
-                    fontSize: "15px",
-                    color: "rgba(255,255,255,0.45)",
-                    padding: 0,
-                    transition: "color 0.2s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "white")}
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "rgba(255,255,255,0.45)")
-                  }
-                >
-                  {link.label}
-                </button>
-              ))}
-            </div>
+            <NavLinks gap="gap-6" fontSize="15px" withHover />
 
             {/* Code block card */}
             <CodeBlock />
 
-            {/* Footer */}
-            <div
-              className="reveal flex items-center justify-between pt-4"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-            >
-              <span
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "11px",
-                  color: "rgba(255,255,255,0.15)",
-                  letterSpacing: "0.1em",
-                }}
-              >
-                © 2025 Zob Dhillon
-              </span>
-              <span
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "11px",
-                  color: "rgba(255,255,255,0.15)",
-                  letterSpacing: "0.1em",
-                }}
-              >
-                // I was my own client.
-              </span>
-            </div>
+            <Footer fontSize="11px" />
           </div>
         </div>
 
         {/* ── MOBILE layout (<lg) ───────────────────────────────────────── */}
         <div className="lg:hidden flex flex-col gap-8">
-          {/* ... /Contacts ... */}
           <div className="reveal">
-            <SectionLabel
-              style={{
-                fontSize: "14px",
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              ... /Contacts ...
-            </SectionLabel>
+            <ContactLabel fontSize="14px" />
           </div>
 
-          {/* Nav links */}
-          <div className="reveal flex items-center gap-5 flex-wrap">
-            {navLinks.map((link) => (
-              <button
-                key={link.id}
-                type="button"
-                onClick={() => scrollTo(link.id)}
-                aria-label={`Go to ${link.label} section`}
-                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "14px",
-                  color: "rgba(255,255,255,0.45)",
-                  padding: 0,
-                }}
-              >
-                {link.label}
-              </button>
-            ))}
+          <div className="reveal">
+            <NavLinks gap="gap-5" fontSize="14px" />
           </div>
 
           {/* Code block */}
@@ -416,37 +401,9 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Social pills — 2 column grid on mobile */}
-          <div className="reveal grid grid-cols-2 gap-2">
-            {socials.map((s) => (
-              <SocialPill key={s.label} {...s} />
-            ))}
-          </div>
+          <SocialsGrid />
 
-          {/* Footer */}
-          <div
-            className="reveal flex items-center justify-between pt-4"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-          >
-            <span
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "10px",
-                color: "rgba(255,255,255,0.15)",
-              }}
-            >
-              © 2025 Zob Dhillon
-            </span>
-            <span
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "10px",
-                color: "rgba(255,255,255,0.15)",
-              }}
-            >
-              // I was my own client.
-            </span>
-          </div>
+          <Footer fontSize="10px" />
         </div>
       </div>
     </section>

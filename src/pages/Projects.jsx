@@ -123,7 +123,6 @@ const projects = [
   },
 ];
 
-// ── Scaled iframe screen (shared by every device chrome) ──────────────────
 function DeviceScreen({ url, w, h, kind, screenRadius, fallbackImage }) {
   const outerRef = useRef(null);
   const [zoom, setZoom] = useState(1);
@@ -153,6 +152,7 @@ function DeviceScreen({ url, w, h, kind, screenRadius, fallbackImage }) {
       new URL(url, window.location.origin).origin === window.location.origin;
 
     if (!isSameOrigin) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStatus("error");
       return () => {
         ro.disconnect();
@@ -289,7 +289,6 @@ function DeviceScreen({ url, w, h, kind, screenRadius, fallbackImage }) {
   );
 }
 
-// ── Device chrome — laptop hinge/base, tablet camera bezel, phone notch ───
 function DeviceFrame({ kind, url, w, h, fallbackImage }) {
   const screen = (
     <DeviceScreen
@@ -336,7 +335,6 @@ function DeviceFrame({ kind, url, w, h, fallbackImage }) {
           />
           {screen}
         </div>
-        {/* keyboard base / hinge */}
         <div
           className="device-base"
           style={{
@@ -394,7 +392,6 @@ function DeviceFrame({ kind, url, w, h, fallbackImage }) {
     );
   }
 
-  // phone
   return (
     <div
       className="device-standalone"
@@ -425,7 +422,6 @@ function DeviceFrame({ kind, url, w, h, fallbackImage }) {
   );
 }
 
-// ── Shared device-chrome hover/shadow styles ───────────────────────────────
 const DEVICE_HOVER_CSS = `
   @keyframes shimmer {
     0%   { background-position:  200% 0; }
@@ -438,7 +434,6 @@ const DEVICE_HOVER_CSS = `
     }
   }
 
-  /* Laptop: wrapper handles the lift, screen + base each carry their own shadow */
   .device-shell { transition: transform .35s ease; cursor: pointer; }
   .device-shell:hover { transform: translateY(-8px); }
   .device-glass {
@@ -471,7 +466,6 @@ const DEVICE_HOVER_CSS = `
     box-shadow: 0 12px 20px rgba(0,0,0,0.4);
   }
 
-  /* Tablet / phone: single element carries both lift + shadow */
   .device-standalone {
     box-shadow: 0 14px 30px rgba(0,0,0,0.35);
     transition: transform .35s ease, box-shadow .35s ease;
@@ -483,7 +477,6 @@ const DEVICE_HOVER_CSS = `
   }
 `;
 
-// ── Visual column — iframes + live button ─────────────────────────────────
 function VisualCol({ devices, live, fallbackImage }) {
   const hasLaptop = !!devices?.laptop;
   const hasTablet = !!devices?.tablet;
@@ -560,10 +553,8 @@ function VisualCol({ devices, live, fallbackImage }) {
     );
   }
 
-  // ── Two-device (laptop + phone) or single-device layout ──────────────────
   return (
     <div className="reveal" style={{ position: "relative", width: "100%" }}>
-      {/* Primary device */}
       <div style={{ position: "relative", width: hasPhone ? "80%" : "95%" }}>
         {primary && (
           <DeviceFrame
@@ -575,7 +566,6 @@ function VisualCol({ devices, live, fallbackImage }) {
           />
         )}
 
-        {/* Live button — centred on bottom edge */}
         {live && (
           <div
             style={{
@@ -591,7 +581,6 @@ function VisualCol({ devices, live, fallbackImage }) {
         )}
       </div>
 
-      {/* Phone overlay */}
       {hasPhone && (
         <div
           style={{
@@ -652,7 +641,6 @@ function StaticVisual({ src, live }) {
   );
 }
 
-// ── Text column ───────────────────────────────────────────────────────────
 function TextCol({ project }) {
   const { num, title, tags, paragraphs, github } = project;
 
@@ -662,7 +650,6 @@ function TextCol({ project }) {
       style={{ position: "relative" }}
     >
       <div style={{ position: "relative" }}>
-        {/* Number */}
         <span
           style={{
             fontFamily: "'JetBrains Mono', monospace",
@@ -677,7 +664,6 @@ function TextCol({ project }) {
           {num} /
         </span>
 
-        {/* Title */}
         <h2
           style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -692,7 +678,6 @@ function TextCol({ project }) {
           {title}
         </h2>
 
-        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-8">
           {tags.map((tag) => (
             <span
@@ -713,7 +698,6 @@ function TextCol({ project }) {
           ))}
         </div>
 
-        {/* Paragraphs */}
         {paragraphs.map((para, i) => (
           <p
             key={i}
@@ -731,7 +715,6 @@ function TextCol({ project }) {
           </p>
         ))}
 
-        {/* GitHub — text column only */}
         {github && (
           <CircleIconButton
             leftIcon={Github}
@@ -744,7 +727,6 @@ function TextCol({ project }) {
   );
 }
 
-// ── Project block ─────────────────────────────────────────────────────────
 function ProjectBlock({ project }) {
   const { flip, useFrame, devices, live, fallbackImage } = project;
 
@@ -757,8 +739,6 @@ function ProjectBlock({ project }) {
   const showDecor = project.num === "00" || project.num === "03";
   const decorSide = flip ? "left" : "right";
 
-  // Below "lg", text always comes first regardless of flip.
-  // At "lg" and up, flip decides the left/right order.
   const visualCol = (
     <div className={`order-2 ${flip ? "lg:order-1" : "lg:order-2"}`}>
       <div className="reveal">{visualEl}</div>
@@ -809,7 +789,6 @@ function ProjectBlock({ project }) {
   );
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────
 export default function Projects() {
   const ref = useReveal({ threshold: 0.08 });
 
@@ -832,7 +811,6 @@ export default function Projects() {
           zIndex: 1,
         }}
       >
-        {/* Heading */}
         <div className="reveal text-center mb-16">
           <SectionLabel>... /Projects ...</SectionLabel>
         </div>
@@ -841,7 +819,6 @@ export default function Projects() {
           <ProjectBlock key={project.num} project={project} index={i} />
         ))}
 
-        {/* Footer */}
         <div className="reveal py-16">
           <span
             style={{

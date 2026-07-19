@@ -52,10 +52,13 @@ const projects = [
 
 const socials = [
   { label: "GitHub", href: "https://github.com/zobdhillon", icon: Github },
-  { label: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/zobia-dhillon-23a712230",
+    icon: Linkedin,
+  },
 ];
 
-// ── Projects pill ──────────────────────────────────────────────────────────────
 function ProjectsPill({ onClick }) {
   return (
     <button
@@ -104,15 +107,66 @@ function ProjectsPill({ onClick }) {
   );
 }
 
+// Repeated hero copy — was written out separately for desktop and mobile
+// with identical <em> emphasis spans inside.
+function Tagline({ className = "", fontSize }) {
+  const emphasisStyle = {
+    fontStyle: "italic",
+    fontWeight: 500,
+    color: "rgba(255,255,255,0.85)",
+  };
+
+  return (
+    <p
+      className={className}
+      style={{
+        color: "rgba(255,255,255,0.5)",
+        fontFamily: "'DM Sans', sans-serif",
+        fontWeight: 300,
+        fontSize,
+      }}
+    >
+      My goal is to <em style={emphasisStyle}>write functional, clean</em> and{" "}
+      <em style={emphasisStyle}>maintainable code</em> that makes every project
+      enjoyable to build.
+    </p>
+  );
+}
+
+// Carousel prev/next buttons — identical apart from direction, label, arrow
+// glyph, and which side they sit on.
+function CarouselArrow({ direction, onClick, arrowSize, isMobile }) {
+  const isPrev = direction === -1;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={isPrev ? "Previous project" : "Next project"}
+      className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
+      style={{
+        width: arrowSize,
+        height: arrowSize,
+        [isPrev ? "left" : "right"]: isMobile
+          ? 8
+          : "max(8px, calc(50% - 50vw + 24px))",
+        borderRadius: "50%",
+        border: "1px solid rgba(255,255,255,0.74)",
+        background: "rgba(9,9,9,0.85)",
+        color: "rgba(255,255,255,0.74)",
+        fontSize: isMobile ? "12px" : "14px",
+      }}
+    >
+      {isPrev ? "←" : "→"}
+    </button>
+  );
+}
+
 function ProjectCarousel() {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(900);
   const [active, setActive] = useState(0);
   const count = projects.length;
 
-  // Keep containerWidth in sync with the carousel's actual rendered width so
-  // the responsive card sizing below reacts correctly (this uses the
-  // existing containerRef, no new refs introduced).
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -192,7 +246,6 @@ function ProjectCarousel() {
                   border: "1px solid rgba(255,255,255,0.13)",
                 }}
               >
-                {/* Terminal body — always visible underneath, z-index 1 */}
                 <div
                   className="p-4"
                   style={{ position: "relative", zIndex: 1, height: "100%" }}
@@ -305,50 +358,22 @@ function ProjectCarousel() {
         })}
       </div>
 
-      {/* Left arrow */}
-      <button
-        type="button"
+      <CarouselArrow
+        direction={-1}
         onClick={() => go(-1)}
-        aria-label="Previous project"
-        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
-        style={{
-          width: arrowSize,
-          height: arrowSize,
-          left: isMobile ? 8 : "max(8px, calc(50% - 50vw + 24px))",
-          borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.74)",
-          background: "rgba(9,9,9,0.85)",
-          color: "rgba(255,255,255,0.74)",
-          fontSize: isMobile ? "12px" : "14px",
-        }}
-      >
-        ←
-      </button>
-
-      {/* Right arrow */}
-      <button
-        type="button"
+        arrowSize={arrowSize}
+        isMobile={isMobile}
+      />
+      <CarouselArrow
+        direction={1}
         onClick={() => go(1)}
-        aria-label="Next project"
-        className="absolute top-1/2 z-30 flex -translate-y-1/2 items-center justify-center transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2DD4BF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
-        style={{
-          width: arrowSize,
-          height: arrowSize,
-          right: isMobile ? 8 : "max(8px, calc(50% - 50vw + 24px))",
-          borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.74)",
-          background: "rgba(9,9,9,0.85)",
-          color: "rgba(255,255,255,0.74)",
-          fontSize: isMobile ? "12px" : "14px",
-        }}
-      >
-        →
-      </button>
+        arrowSize={arrowSize}
+        isMobile={isMobile}
+      />
     </div>
   );
 }
 
-// ── Page ───────────────────────────────────────────────────────────────────────
 export default function Home() {
   const heroRef = useReveal();
 
@@ -383,7 +408,6 @@ export default function Home() {
         className="relative mx-auto flex w-full max-w-7xl flex-col px-4 sm:px-6 md:px-8 pb-10"
         style={{ minHeight: "calc(100vh - 72px)", zIndex: 1 }}
       >
-        {/* ── DESKTOP layout (md+) ───────────────────────────────────────── */}
         <div className="hidden md:block">
           <div className="reveal flex items-start justify-between gap-6 mt-12">
             <h1
@@ -402,37 +426,10 @@ export default function Home() {
           </div>
 
           <div className="reveal mt-2 flex items-end justify-between gap-8">
-            <p
+            <Tagline
               className="max-w-xs leading-relaxed"
-              style={{
-                color: "rgba(255,255,255,0.5)",
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 300,
-                fontSize: "clamp(13px, 1.4vw, 18px)",
-              }}
-            >
-              My goal is to{" "}
-              <em
-                style={{
-                  fontStyle: "italic",
-                  fontWeight: 500,
-                  color: "rgba(255,255,255,0.85)",
-                }}
-              >
-                write functional, clean
-              </em>{" "}
-              and{" "}
-              <em
-                style={{
-                  fontStyle: "italic",
-                  fontWeight: 500,
-                  color: "rgba(255,255,255,0.85)",
-                }}
-              >
-                maintainable code
-              </em>{" "}
-              that makes every project enjoyable to build.
-            </p>
+              fontSize="clamp(13px, 1.4vw, 18px)"
+            />
             <h2
               className="leading-none text-white"
               style={{
@@ -446,7 +443,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── MOBILE layout (<md) ───────────────────────────────────────── */}
         <div className="md:hidden mt-10">
           <h1
             className="reveal leading-tight text-white text-center"
@@ -461,44 +457,16 @@ export default function Home() {
             Developer<span style={{ color: "#2DD4BF" }}>.</span>
           </h1>
 
-          <p
+          <Tagline
             className="reveal mt-5 text-center leading-relaxed"
-            style={{
-              color: "rgba(255,255,255,0.5)",
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 300,
-              fontSize: "14px",
-            }}
-          >
-            My goal is to{" "}
-            <em
-              style={{
-                fontStyle: "italic",
-                fontWeight: 500,
-                color: "rgba(255,255,255,0.85)",
-              }}
-            >
-              write functional, clean
-            </em>{" "}
-            and{" "}
-            <em
-              style={{
-                fontStyle: "italic",
-                fontWeight: 500,
-                color: "rgba(255,255,255,0.85)",
-              }}
-            >
-              maintainable code
-            </em>{" "}
-            that makes every project enjoyable to build.
-          </p>
+            fontSize="14px"
+          />
 
           <div className="reveal mt-6 flex justify-center">
             <ProjectsPill onClick={scrollToProjects} />
           </div>
         </div>
 
-        {/* ── Social pills ──────────────────────────────────────────────── */}
         <div className="reveal mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
           {socials.map(({ label, href, icon: Icon }) => (
             <a
@@ -536,7 +504,6 @@ export default function Home() {
             </a>
           ))}
 
-          {/* Available pill — subtle pulse, no extra hover needed */}
           <button
             type="button"
             onClick={() => {
@@ -574,7 +541,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* ── Carousel ──────────────────────────────────────────────────── */}
         <div className="reveal mt-8 flex-1 flex items-center justify-center min-h-0">
           <div className="relative w-full" style={{ zIndex: 1 }}>
             <ProjectCarousel />

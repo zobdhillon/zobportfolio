@@ -11,7 +11,7 @@ export default function CircleIconButton({
   iconSize = 20,
   label = "button",
 }) {
-  const overlap = size * 0.35; // how much the circles overlap
+  const overlap = size * 0.35;
 
   const circleBase = {
     width: size,
@@ -52,7 +52,6 @@ export default function CircleIconButton({
         position: "relative",
       }}
     >
-      {/* Left circle — secondary/social icon */}
       <div style={{ ...circleBase, position: "relative", zIndex: 1 }}>
         <LeftIcon
           size={iconSize}
@@ -61,7 +60,6 @@ export default function CircleIconButton({
         />
       </div>
 
-      {/* Right circle — action icon (arrow), sits on top */}
       {href ? (
         <a
           href={href}
