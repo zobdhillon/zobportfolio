@@ -54,7 +54,7 @@ const socials = [
   { label: "GitHub", href: "https://github.com/zobdhillon", icon: Github },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/zobia-dhillon-23a712230",
+    href: "https://www.linkedin.com/in/zobdhillon/",
     icon: Linkedin,
   },
 ];

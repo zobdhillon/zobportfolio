@@ -7,7 +7,7 @@ import useReveal from "../hooks/useReveal";
 const socials = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/zobia-dhillon-23a712230",
+    href: "https://www.linkedin.com/in/zobdhillon/",
     icon: Linkedin,
   },
   { label: "E-mail", href: "mailto:zobbdhillon@gmail.com", icon: Mail },
