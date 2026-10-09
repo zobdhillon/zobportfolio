@@ -26,7 +26,7 @@ const projects = [
         to a complete end-to-end practice experience.
       </>,
     ],
-    live: "https://rehearse-ai.up.railway.app",
+    live: "https://rehearse-aicoach.up.railway.app",
     github: "https://github.com/zobdhillon/Rehearse",
     fallbackImage: rehearseImg,
     useFrame: false,

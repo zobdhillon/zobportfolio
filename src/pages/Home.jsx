@@ -14,7 +14,7 @@ const projects = [
     description:
       "AI-powered interview practice platform with real-time feedback, scoring, and session tracking.",
     tags: ["Laravel", "PHP", "MySQL", "Groq API"],
-    live: "https://rehearse-ai.up.railway.app",
+    live: "https://rehearse-aicoach.up.railway.app",
     github: "https://github.com/zobdhillon/Rehearse",
     image: rehearseImg,
   },
@@ -107,8 +107,6 @@ function ProjectsPill({ onClick }) {
   );
 }
 
-// Repeated hero copy — was written out separately for desktop and mobile
-// with identical <em> emphasis spans inside.
 function Tagline({ className = "", fontSize }) {
   const emphasisStyle = {
     fontStyle: "italic",
