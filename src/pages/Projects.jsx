@@ -6,7 +6,7 @@ import { Github, Globe } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 import rehearseImg from "../assets/rehearse.png";
 import devlogsCoverImg from "../assets/devlogs-cover.png";
-import sabaPreviewImg from "../assets/saba-preview.png";
+import sabaPreviewImg from "../assets/sabach.png";
 import resumeImg from "../assets/resume.png";
 
 const projects = [
@@ -52,18 +52,18 @@ const projects = [
         sharing and an activity feed — all built with Laravel and Tailwind.
       </>,
     ],
-    live: "https://devlogs-zobdhillon.up.railway.app/",
+    live: "https://devlogss.up.railway.app/",
     github: "https://github.com/zobdhillon/devlogs",
     fallbackImage: devlogsCoverImg,
     useFrame: false,
     devices: {
       laptop: {
-        url: "https://devlogs-zobdhillon.up.railway.app/#demo",
+        url: "https://devlogss.up.railway.app/#demo",
         w: 1440,
         h: 900,
       },
       phone: {
-        url: "https://devlogs-zobdhillon.up.railway.app/",
+        url: "https://devlogss.up.railway.app/",
         w: 390,
         h: 844,
       },
@@ -111,13 +111,13 @@ const projects = [
         resume current.
       </>,
     ],
-    live: "https://zob-resume.up.railway.app/",
+    live: "https://resumejson.up.railway.app/",
     github: "https://github.com/zobdhillon/Resume",
     fallbackImage: resumeImg,
     useFrame: false,
     devices: {
-      laptop: { url: "https://zob-resume.up.railway.app/", w: 1440, h: 900 },
-      phone: { url: "https://zob-resume.up.railway.app/print", w: 390, h: 844 },
+      laptop: { url: "https://resumejson.up.railway.app/", w: 1440, h: 900 },
+      phone: { url: "https://resumejson.up.railway.app/print", w: 390, h: 844 },
     },
     flip: true,
   },

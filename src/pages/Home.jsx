@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, FileText } from "lucide-react";
 import PillButton from "../components/PillButton";
 import SideCircle from "../components/SideCircle";
 import rehearseImg from "../assets/rehearse.png";
 import devlogsImg from "../assets/devlogs.png";
 import resumeImg from "../assets/resume.png";
 import useReveal from "../hooks/useReveal";
+import sabachImg from "../assets/sabach.png";
 
 const projects = [
   {
@@ -24,27 +25,27 @@ const projects = [
     description:
       "A full stack developer social platform. Create posts, track learning progress and interact with other developers.",
     tags: ["Laravel", "PHP", "MySQL", "Tailwind"],
-    live: "https://devlogs-zobdhillon.up.railway.app/",
+    live: "https://devlogss.up.railway.app/",
     github: "https://github.com/zobdhillon/devlogs",
     image: devlogsImg,
   },
   {
     num: "02",
-    title: "Resume",
+    title: "SabaCh",
     description:
-      "A dynamic resume generator that renders your entire resume from a single JSON data file, keeping content and presentation cleanly separated",
-    tags: ["HTML", "Tailwind", "Laravel"],
+      "A web project built with a responsive frontend and modern styling.",
+    tags: ["HTML", "Tailwind CSS", "JavaScript"],
     live: "https://sabach.netlify.app/",
     github: "https://github.com/zobdhillon/SabaCh",
-    image: resumeImg,
+    image: sabachImg,
   },
   {
     num: "03",
     title: "Resume",
     description:
-      "Dynamic resume generator that renders your entire resume from a single JSON data file, keeping content and presentation cleanly separated.",
-    tags: ["JavaScript", "JSON", "Railway"],
-    live: "https://zob-resume.up.railway.app/",
+      "Dynamic resume generator that renders your resume from a single JSON data file and generates PDF output.",
+    tags: ["Laravel", "PHP", "JavaScript", "JSON", "DomPDF"],
+    live: "https://resumejson.up.railway.app/",
     github: "https://github.com/zobdhillon/Resume",
     image: resumeImg,
   },
@@ -57,6 +58,7 @@ const socials = [
     href: "https://www.linkedin.com/in/zobdhillon/",
     icon: Linkedin,
   },
+  { label: "Resume", href: "/Zobia_Akbar_CV.pdf", icon: FileText },
 ];
 
 function ProjectsPill({ onClick }) {
@@ -131,8 +133,6 @@ function Tagline({ className = "", fontSize }) {
   );
 }
 
-// Carousel prev/next buttons — identical apart from direction, label, arrow
-// glyph, and which side they sit on.
 function CarouselArrow({ direction, onClick, arrowSize, isMobile }) {
   const isPrev = direction === -1;
   return (
@@ -209,9 +209,7 @@ function ProjectCarousel() {
           const isCenter = offset === 0;
           const isVisible = Math.abs(offset) <= 1;
           const scale = isCenter ? 1 : 0.86;
-          // Dim via an internal overlay instead of element opacity, so the
-          // card stays fully opaque and blocks SideCircle behind it.
-          const dimAmount = isCenter ? 0 : isVisible ? 0.65 : 1; // 1 = fully hidden
+          const dimAmount = isCenter ? 0 : isVisible ? 0.65 : 1;
           const translateX = offset * peek;
 
           return (
@@ -221,12 +219,7 @@ function ProjectCarousel() {
               style={{
                 width: cardWidth,
                 height: cardHeight,
-                // translateZ(0) forces this card onto its own GPU compositing
-                // layer, so the browser scales/animates it with the GPU's
-                // sub-pixel-accurate transform instead of re-rasterizing at
-                // low-precision CPU-scaled coordinates on every frame — this
-                // is what keeps the image crisp during the scale/slide
-                // transition instead of it going soft mid-animation.
+
                 transform: `translateX(${translateX}px) translateZ(0) scale(${scale})`,
                 opacity: isVisible ? 1 : 0,
                 zIndex: isCenter ? 20 : 10,
@@ -259,21 +252,15 @@ function ProjectCarousel() {
                       top: 0,
                       left: 0,
                       filter: "grayscale(100%)",
-                      // Explicit "auto" keeps the browser's default
-                      // high-quality resampling — some browsers fall back to
-                      // a cheaper/blurrier algorithm on transformed images
-                      // unless this is stated explicitly.
+
                       imageRendering: "auto",
-                      // Own compositing layer for the image too, so it isn't
-                      // re-rasterized as part of its ancestor's transform.
+
                       transform: "translateZ(0)",
                       backfaceVisibility: "hidden",
                     }}
                   />
                 </div>
 
-                {/* Dim overlay — replaces element opacity so side cards stay
-                    solid (blocking SideCircle) while still reading as faded */}
                 {dimAmount > 0 && (
                   <div
                     className="absolute inset-0 transition-opacity duration-500 ease-out"
@@ -385,7 +372,7 @@ export default function Home() {
   };
 
   return (
-    <main
+    <div
       ref={heroRef}
       className="relative w-full"
       style={{
@@ -545,6 +532,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

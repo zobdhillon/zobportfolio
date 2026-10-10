@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
+import Experience from "./pages/Experience";
 
 function Cursor() {
   const dot = useRef(null);
@@ -46,6 +47,9 @@ export default function App() {
         </section>
         <section id="projects">
           <Projects />
+        </section>
+        <section id="experience">
+          <Experience />
         </section>
         <section id="contact">
           <Contact />

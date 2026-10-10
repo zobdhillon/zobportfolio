@@ -5,7 +5,8 @@ const links = [
   { id: "home", label: "Home", num: "01" },
   { id: "about", label: "About", num: "02" },
   { id: "projects", label: "Projects", num: "03" },
-  { id: "contact", label: "Contact", num: "04" },
+  { id: "experience", label: "Experience", num: "04" },
+  { id: "contact", label: "Contact", num: "05" },
 ];
 
 export default function Navbar() {

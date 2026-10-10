@@ -1,7 +1,7 @@
 import CircleIconButton from "../components/CircleIconButton";
 import SideCircle from "../components/SideCircle";
 import SkillCard from "../components/SkillCard";
-import profilePic from "../assets/profile-pic.png";
+import profilePic from "../assets/profile.png";
 import useReveal from "../hooks/useReveal";
 
 const frontEnd = {
@@ -218,8 +218,7 @@ export default function About() {
             <div
               className="portrait-box"
               style={{
-                borderRadius: "18px",
-                border: "1px solid rgba(0,210,163,0.2)",
+                borderRadius: "50%",
                 background: "#0e0e0e",
                 overflow: "hidden",
               }}
@@ -231,6 +230,7 @@ export default function About() {
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
+                  objectPosition: "center top",
                   filter: "grayscale(100%)",
                 }}
               />
@@ -258,8 +258,8 @@ export default function About() {
         }
 
         .portrait-box {
-          width: 340px;
-          height: 440px;
+          width: 400px;
+          height: 400px;
         }
 
         @media (max-width: 1024px) {
@@ -281,7 +281,7 @@ export default function About() {
             width: 100%;
             max-width: 340px;
             height: auto;
-            aspect-ratio: 340 / 440;
+            aspect-ratio: 1 / 1;
             margin: 0 auto;
           }
         }
@@ -317,9 +317,9 @@ export default function About() {
           }
           .portrait-box {
             width: 100%;
-            max-width: 100%;
+            max-width: 320px;
             height: auto;
-            aspect-ratio: 4 / 3;
+            aspect-ratio: 1 / 1;
           }
         }
       `}</style>
